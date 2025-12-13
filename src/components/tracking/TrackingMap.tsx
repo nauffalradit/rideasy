@@ -1,9 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import type { RentedVehicle } from '@/lib/types';
-import Image from 'next/image';
 import { icon } from 'leaflet';
 
 const ICON = icon({
@@ -39,6 +38,7 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
         zoom={zoomLevel} 
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%' }}
+        className="z-0"
         // placeholder component to prevent re-initialization issues
         placeholder={<div className="w-full h-full bg-muted animate-pulse" />}
     >
@@ -60,30 +60,6 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
         >
         </Marker>
       ))}
-
-      {selectedVehicle && (
-        <Popup position={[selectedVehicle.location.lat, selectedVehicle.location.lng]}>
-          <div className="p-1 max-w-xs">
-            <div className="flex items-center gap-4">
-              <Image
-                src={selectedVehicle.image.imageUrl}
-                alt={selectedVehicle.image.description}
-                width={80}
-                height={60}
-                className="rounded-md object-cover"
-                data-ai-hint={selectedVehicle.image.imageHint}
-              />
-              <div>
-                <h3 className="font-bold">{selectedVehicle.name}</h3>
-                <p className="text-sm">Plate: {selectedVehicle.plate}</p>
-                <p className="text-xs text-muted-foreground">
-                  Lat: {selectedVehicle.location.lat.toFixed(4)}, Lng: {selectedVehicle.location.lng.toFixed(4)}
-                </p>
-              </div>
-            </div>
-          </div>
-        </Popup>
-      )}
     </MapContainer>
   );
 }

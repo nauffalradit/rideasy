@@ -3,12 +3,13 @@
 import * as React from 'react';
 import dynamic from 'next/dynamic';
 import type { RentedVehicle } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { MapPin, Loader2 } from 'lucide-react';
+import { MapPin, Loader2, X } from 'lucide-react';
 import { useVehicles } from '@/context/VehicleContext';
+import { Button } from '@/components/ui/button';
 
 // Dynamically import the map component to ensure it's client-side only
 const TrackingMap = dynamic(() => import('@/components/tracking/TrackingMap'), {
@@ -134,6 +135,38 @@ function VehicleTracker() {
           selectedVehicle={selectedVehicle}
           onVehicleSelect={setSelectedVehicle}
         />
+        {selectedVehicle && (
+          <Card className="absolute bottom-4 left-1/2 -translate-x-1/2 w-11/12 max-w-sm shadow-2xl z-[1000]">
+             <CardHeader className="p-4">
+                <div className="flex items-center gap-4">
+                    <Image
+                        src={selectedVehicle.image.imageUrl}
+                        alt={selectedVehicle.image.description}
+                        width={100}
+                        height={75}
+                        className="rounded-lg object-cover"
+                        data-ai-hint={selectedVehicle.image.imageHint}
+                    />
+                    <div>
+                        <CardTitle className="text-lg">{selectedVehicle.name}</CardTitle>
+                        <p className="text-sm text-muted-foreground">Plate: {selectedVehicle.plate}</p>
+                         <p className="text-xs text-muted-foreground mt-1">
+                            Lat: {selectedVehicle.location.lat.toFixed(4)}, Lng: {selectedVehicle.location.lng.toFixed(4)}
+                        </p>
+                    </div>
+                </div>
+            </CardHeader>
+             <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 h-6 w-6 z-10"
+                onClick={() => setSelectedVehicle(null)}
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Close</span>
+              </Button>
+          </Card>
+        )}
       </div>
     </div>
   );
