@@ -10,66 +10,61 @@
           "type": "string",
           "description": "Unique identifier for the vehicle."
         },
+        "type": {
+          "type": "string",
+          "description": "The type of vehicle (e.g., motorcycle, car)."
+        },
         "make": {
           "type": "string",
-          "description": "The manufacturer of the vehicle (e.g., Toyota)."
+          "description": "The make of the vehicle (e.g., Honda, Toyota)."
         },
         "model": {
           "type": "string",
-          "description": "The model of the vehicle (e.g., Camry)."
+          "description": "The model of the vehicle (e.g., Civic, CBR500R)."
         },
         "year": {
           "type": "number",
-          "description": "The year the vehicle was manufactured."
+          "description": "The manufacturing year of the vehicle."
         },
-        "type": {
-          "type": "string",
-          "description": "The type of vehicle (e.g., car, motorcycle)."
-        },
-        "rentalPricePerHour": {
+        "rentalPrice": {
           "type": "number",
-          "description": "The hourly rental price of the vehicle."
+          "description": "The price to rent the vehicle per day."
         },
-        "description": {
+        "specifications": {
           "type": "string",
-          "description": "A detailed description of the vehicle."
+          "description": "Details of vehicle specifications"
         },
-        "imageUrls": {
-          "type": "array",
-          "description": "URLs of images of the vehicle.",
-          "items": {
-            "type": "string"
-          }
+        "imageURL": {
+          "type": "string",
+          "description": "URL of the vehicle image"
         }
       },
       "required": [
         "id",
+        "type",
         "make",
         "model",
         "year",
-        "type",
-        "rentalPricePerHour",
-        "description",
-        "imageUrls"
+        "rentalPrice"
       ]
     },
-    "RentalOrder": {
+    "Rental": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "RentalOrder",
+      "title": "Rental",
       "type": "object",
-      "description": "Represents a rental order placed by a user.",
+      "description": "Represents a rental booking made by a user.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the rental order."
+          "description": "Unique identifier for the rental booking."
         },
         "userId": {
           "type": "string",
-          "description": "Reference to User. (Relationship: User 1:N RentalOrder)"
+          "description": "Reference to User. (Relationship: User 1:N Rental)"
         },
         "vehicleId": {
           "type": "string",
-          "description": "Reference to Vehicle. (Relationship: Vehicle 1:N RentalOrder)"
+          "description": "Reference to Vehicle. (Relationship: Vehicle 1:N Rental)"
         },
         "startDate": {
           "type": "string",
@@ -81,13 +76,13 @@
           "description": "The end date and time of the rental.",
           "format": "date-time"
         },
-        "totalPrice": {
+        "totalCost": {
           "type": "number",
-          "description": "The total price of the rental."
+          "description": "The total cost of the rental."
         },
         "status": {
           "type": "string",
-          "description": "The status of the rental order (e.g., pending, active, completed, cancelled)."
+          "description": "The status of the rental (e.g., pending, confirmed, completed, cancelled)."
         }
       },
       "required": [
@@ -96,7 +91,7 @@
         "vehicleId",
         "startDate",
         "endDate",
-        "totalPrice",
+        "totalCost",
         "status"
       ]
     },
@@ -110,6 +105,10 @@
           "type": "string",
           "description": "Unique identifier for the user."
         },
+        "name": {
+          "type": "string",
+          "description": "The user's full name."
+        },
         "email": {
           "type": "string",
           "description": "The user's email address.",
@@ -119,72 +118,63 @@
           "type": "string",
           "description": "The user's phone number."
         },
-        "firstName": {
+        "profilePictureURL": {
           "type": "string",
-          "description": "The user's first name."
+          "description": "URL of the user profile picture"
         },
-        "lastName": {
+        "authProvider": {
           "type": "string",
-          "description": "The user's last name."
-        },
-        "profileImageUrl": {
-          "type": "string",
-          "description": "URL to the user's profile image."
-        },
-        "loginType": {
-          "type": "string",
-          "description": "Specifies what type of login the user uses. (e.g., Email, Phone Number, Google, Facebook)"
+          "description": "Authentication provider used to login (e.g., email, google, facebook)."
         }
       },
       "required": [
         "id",
+        "name",
         "email",
-        "firstName",
-        "lastName"
+        "phoneNumber"
       ]
     },
-    "GpsReading": {
+    "GPSData": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "GpsReading",
+      "title": "GPSData",
       "type": "object",
-      "description": "Represents a GPS reading for a vehicle.",
+      "description": "Represents GPS coordinates of a vehicle at a specific time.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the GPS reading."
+          "description": "Unique identifier for the GPS data entry."
         },
         "vehicleId": {
           "type": "string",
-          "description": "Reference to Vehicle. (Relationship: Vehicle 1:N GpsReading)"
-        },
-        "latitude": {
-          "type": "number",
-          "description": "The latitude of the vehicle's location."
-        },
-        "longitude": {
-          "type": "number",
-          "description": "The longitude of the vehicle's location."
+          "description": "Reference to Vehicle. (Relationship: Vehicle 1:N GPSData)"
         },
         "timestamp": {
           "type": "string",
-          "description": "The timestamp of the GPS reading.",
+          "description": "Timestamp when the GPS data was recorded.",
           "format": "date-time"
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Latitude coordinate of the vehicle."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Longitude coordinate of the vehicle."
         }
       },
       "required": [
         "id",
         "vehicleId",
+        "timestamp",
         "latitude",
-        "longitude",
-        "timestamp"
+        "longitude"
       ]
     }
   },
   "auth": {
     "providers": [
       "password",
-      "google.com",
-      "phone"
+      "anonymous"
     ]
   },
   "firestore": {
@@ -196,31 +186,31 @@
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Stores user profiles.  Authentication is handled by Firebase Auth; the 'userId' is the Firebase Auth UID.",
+          "description": "Stores user profiles. Path-based ownership is enforced via the `userId` parameter.",
           "params": [
             {
               "name": "userId",
-              "description": "The Firebase Auth UID of the user."
+              "description": "The unique ID of the user."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/rental_orders/{rentalOrderId}",
+        "path": "/users/{userId}/rentals/{rentalId}",
         "definition": {
-          "entityName": "RentalOrder",
+          "entityName": "Rental",
           "schema": {
-            "$ref": "#/backend/entities/RentalOrder"
+            "$ref": "#/backend/entities/Rental"
           },
-          "description": "Stores rental orders for each user.  Ownership is implied by the path.",
+          "description": "Stores rental bookings for a specific user.  Path-based ownership inherited from the parent user document. Includes denormalized 'userId' and 'vehicleId' for authorization independence.",
           "params": [
             {
               "name": "userId",
-              "description": "The Firebase Auth UID of the user who created the rental order."
+              "description": "The unique ID of the user who created the rental."
             },
             {
-              "name": "rentalOrderId",
-              "description": "The unique identifier for the rental order."
+              "name": "rentalId",
+              "description": "The unique ID of the rental booking."
             }
           ]
         }
@@ -232,36 +222,36 @@
           "schema": {
             "$ref": "#/backend/entities/Vehicle"
           },
-          "description": "Stores vehicle information.  Any authenticated user can read vehicles, but only admins can create, update or delete them.",
+          "description": "Stores vehicle data. Vehicle data is publicly accessible for browsing and the application assumes that specific vehicle permissions (like modifying vehicle details) are managed through backend logic or admin roles (not defined in this structure).",
           "params": [
             {
               "name": "vehicleId",
-              "description": "The unique identifier for the vehicle."
+              "description": "The unique ID of the vehicle."
             }
           ]
         }
       },
       {
-        "path": "/vehicles/{vehicleId}/gps_readings/{gpsReadingId}",
+        "path": "/vehicles/{vehicleId}/gps_data/{gpsDataId}",
         "definition": {
-          "entityName": "GpsReading",
+          "entityName": "GPSData",
           "schema": {
-            "$ref": "#/backend/entities/GpsReading"
+            "$ref": "#/backend/entities/GPSData"
           },
-          "description": "Stores GPS readings for each vehicle. VehicleId is denormalized to allow performant queries and avoid collection group queries.  Only the vehicle owner (or authorized personnel) can write GPS readings.",
+          "description": "Stores GPS data for a specific vehicle. Access to this subcollection is assumed to be controlled through backend logic. Includes denormalized 'vehicleId'.",
           "params": [
             {
               "name": "vehicleId",
-              "description": "The unique identifier for the vehicle."
+              "description": "The unique ID of the vehicle associated with the GPS data."
             },
             {
-              "name": "gpsReadingId",
-              "description": "The unique identifier for the GPS reading."
+              "name": "gpsDataId",
+              "description": "The unique ID of the GPS data entry."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to support the Rideasy application's core features, emphasizing security, scalability, and ease of debugging. It leverages denormalization to achieve authorization independence, enabling atomic operations and simplifying security rules. The structure also segregates data based on access needs and employs consistent access modeling patterns.\n\n**Authorization Independence:** User specific data, like `RentalOrders`, are stored as subcollections of the `/users/{userId}` collection. This way there is no need to query other collections for security rules, so atomic operations are possible. Ownership of `RentalOrder` is implicit based on its path.\n\n**Structural Segregation:** Different types of data with varying access requirements are stored in separate collections. User profiles are in `/users/{userId}`, vehicles are in `/vehicles/{vehicleId}` and GPS readings are stored in `/vehicles/{vehicleId}/gps_readings/{gpsReadingId}`. This segregation simplifies security rules by ensuring all documents in a collection share the same access control requirements.\n\n**Access Modeling:** The structure utilizes path-based ownership for user-related data. For example, rental orders are stored under the respective user's document (`/users/{userId}/rental_orders/{rentalOrderId}`).\n\n**QAPs Support:** The segregation of vehicles into a dedicated collection (`/vehicles`) facilitates secure listing operations.  Since access to the vehicles is not based on properties of another document, listing all vehicles is possible."
+    "reasoning": "The Firestore data structure is designed to support the Rideasy application, focusing on vehicle rentals and real-time tracking. The design prioritizes Authorization Independence, QAPs, and clarity, following the core design principles outlined.\n\n**Authorization Independence:**\n\n*   User data is stored under `/users/{userId}`, ensuring path-based ownership. Rentals, associated with a user, are stored under `/users/{userId}/rentals/{rentalId}`, inheriting the user's ownership implicitly through the path. This avoids the need for `get()` calls to verify ownership.\n*   Vehicle data is globally accessible for browsing. However, the `GPSData` is stored as a subcollection of vehicles (`/vehicles/{vehicleId}/gps_data/{gpsDataId}`), which requires no user-based authorization. The application assumes all GPS data needs to be secured by other means like backend services.\n\n**QAPs (Rules are not Filters):**\n\n*   Segregation is used to differentiate user-owned data (rentals) from globally accessible data (vehicles). User rentals are stored in user-specific subcollections, allowing secure listing based on the user's ID. Vehicles are stored in a top-level collection, assuming different (potentially less restrictive) listing requirements or backend-controlled access.\n\n**Data Clarity and Predictability:**\n\n*   Explicit state modeling is employed for rentals using the `status` field (`pending`, `confirmed`, `completed`, `cancelled`).\n\n**Denormalization:**\n\n*   For the Rental entity, the `userId` and `vehicleId` are denormalized directly into the document. This is necessary to establish the relationship without needing complex lookups during security rule evaluation."
   }
 }
