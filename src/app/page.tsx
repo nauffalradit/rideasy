@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import VehicleList from '@/components/vehicles/VehicleList';
@@ -31,6 +32,9 @@ export default function Home() {
           <div className="mt-8 flex justify-center gap-4">
             <Button asChild size="lg" className="font-bold text-lg">
               <Link href="#vehicles">Browse Vehicles</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="font-bold text-lg bg-transparent hover:bg-white/10 border-white text-white">
+                <Link href="/register">Register</Link>
             </Button>
           </div>
         </div>

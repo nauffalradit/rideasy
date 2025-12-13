@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Phone } from 'lucide-react';
 import GoogleIcon from '@/components/icons/GoogleIcon';
 import { useAuth } from '@/firebase';
 import {
@@ -120,7 +119,6 @@ export default function RegisterForm() {
       </div>
       <div className="grid grid-cols-1 gap-2">
         <Button variant="outline" onClick={handleGoogleSignIn}><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
-        <Button variant="outline" disabled><Phone /> Sign Up with Phone</Button>
       </div>
     </div>
   );
