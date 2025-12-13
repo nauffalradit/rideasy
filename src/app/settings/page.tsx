@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Globe, Palette, Bell, MapPin, ShieldLock, Lock, Info } from 'lucide-react';
+import { Globe, Palette, Bell, MapPin, Shield, Lock, Info } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SettingsPage() {
@@ -126,7 +126,7 @@ export default function SettingsPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <ShieldLock className="w-6 h-6" />
+                  <Shield className="w-6 h-6" />
                   <div>
                     <CardTitle>Privasi & Data</CardTitle>
                     <CardDescription>Rapi dan aman.</CardDescription>
