@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Car, LogOut } from 'lucide-react';
+import { Menu, Car, LogOut, LayoutDashboard, CarFront, Users, MapPin } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useUser, useAuth } from '@/firebase';
@@ -20,8 +20,10 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 const navLinks = [
-  { href: '/', label: 'Vehicles' },
-  { href: '/tracking', label: 'Track My Ride' },
+  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/vehicles', label: 'Vehicles', icon: CarFront },
+  { href: '/tracking', label: 'Live Map', icon: MapPin },
+  { href: '/users', label: 'Users', icon: Users },
 ];
 
 export default function Header() {
@@ -57,7 +59,7 @@ export default function Header() {
         <div className="mr-4 flex">
           <Link href="/" className="flex items-center space-x-2">
             <Car className="h-6 w-6 text-primary" />
-            <span className="font-bold font-headline text-lg">Rideasy</span>
+            <span className="font-bold font-headline text-lg">Rideasy Admin</span>
           </Link>
         </div>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
@@ -66,10 +68,11 @@ export default function Header() {
               key={link.href}
               href={link.href}
               className={cn(
-                'transition-colors hover:text-foreground/80',
+                'transition-colors hover:text-foreground/80 flex items-center gap-2',
                 pathname === link.href ? 'text-foreground' : 'text-foreground/60'
               )}
             >
+              <link.icon className="h-4 w-4" />
               {link.label}
             </Link>
           ))}
@@ -90,7 +93,7 @@ export default function Header() {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user.displayName || 'User'}</p>
+                    <p className="text-sm font-medium leading-none">{user.displayName || 'Admin User'}</p>
                     <p className="text-xs leading-none text-muted-foreground">
                       {user.email}
                     </p>
@@ -125,14 +128,15 @@ export default function Header() {
                 <div className="flex flex-col space-y-4 pt-8">
                   <Link href="/" className="flex items-center space-x-2 mb-4">
                     <Car className="h-6 w-6 text-primary" />
-                    <span className="font-bold font-headline text-lg">Rideasy</span>
+                    <span className="font-bold font-headline text-lg">Rideasy Admin</span>
                   </Link>
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="text-lg"
+                      className="text-lg flex items-center gap-2"
                     >
+                      <link.icon className="h-5 w-5" />
                       {link.label}
                     </Link>
                   ))}
