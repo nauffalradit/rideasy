@@ -135,13 +135,11 @@ service cloud.firestore {
      * @principle Provides public read access for application content while locking down all client-side writes, deferring modifications to a trusted backend process.
      */
     match /vehicles/{vehicleId} {
-      allow get: if true;
-      allow list: if true;
-      // CRITICAL: Cannot implement owner-only writes. The 'Vehicle' entity is missing an 'ownerId' or 'authorId' field.
-      // Writes are disabled for clients, assuming a backend with admin privileges will manage this collection.
-      allow create: if false; // TODO: Implement admin-only or backend-only write access.
-      allow update: if false; // TODO: Implement admin-only or backend-only write access.
-      allow delete: if false; // TODO: Implement admin-only or backend-only write access.
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+      allow create: if isSignedIn(); 
+      allow update: if isSignedIn(); 
+      allow delete: if isSignedIn();
 
       /**
        * @description Secures sensitive GPS data for a vehicle.
