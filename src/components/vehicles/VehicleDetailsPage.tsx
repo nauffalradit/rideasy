@@ -9,13 +9,32 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Car, Fuel, Gauge, Users, GitCommitHorizontal, Sparkles, Zap, Bike } from 'lucide-react';
-import BookingForm from './BookingForm';
+import { Car, Fuel, Gauge, Users, GitCommitHorizontal, Sparkles, Zap, Bike, Wrench, CalendarCheck } from 'lucide-react';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 type VehicleDetailsPageProps = {
   vehicle: Vehicle;
+};
+
+const statusConfig = {
+    Available: {
+        color: "bg-green-500",
+        icon: CalendarCheck,
+        text: "Available",
+    },
+    Rented: {
+        color: "bg-yellow-500",
+        icon: Car,
+        text: "Rented",
+    },
+    Maintenance: {
+        color: "bg-orange-500",
+        icon: Wrench,
+        text: "Maintenance",
+    },
 };
 
 export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps) {
@@ -26,6 +45,8 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
     { icon: Users, label: 'Seats', value: vehicle.seats },
     { icon: GitCommitHorizontal, label: 'Transmission', value: vehicle.transmission },
   ];
+  
+  const currentStatus = statusConfig[vehicle.status];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -84,7 +105,23 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
                     <span className="text-xl text-muted-foreground">/day</span>
                 </div>
                 
-                <BookingForm vehicle={vehicle} />
+                <Card className="w-full shadow-lg">
+                    <CardHeader>
+                        <CardTitle>Vehicle Status</CardTitle>
+                        <CardDescription>Manage vehicle availability and maintenance.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center gap-4 p-4 rounded-lg bg-muted">
+                            <div className={cn("w-3 h-3 rounded-full animate-pulse", currentStatus.color)}></div>
+                            <currentStatus.icon className="w-6 h-6 text-foreground" />
+                            <p className="text-lg font-semibold">{currentStatus.text}</p>
+                        </div>
+                    </CardContent>
+                    <CardFooter className='flex gap-2'>
+                        <Button variant="outline" className="w-full">Mark for Maintenance</Button>
+                        <Button className="w-full">Edit Vehicle</Button>
+                    </CardFooter>
+                </Card>
             </div>
         </div>
       </div>

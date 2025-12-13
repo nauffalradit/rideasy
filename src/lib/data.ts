@@ -17,6 +17,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 55,
     seats: 4,
     transmission: 'Automatic',
+    status: 'Available',
     image: findImage('car-1'),
     specs: {
       engine: '1.5L 4-Cylinder',
@@ -32,6 +33,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 70,
     seats: 7,
     transmission: 'Automatic',
+    status: 'Rented',
     image: findImage('car-2'),
     specs: {
       engine: '2.0L Turbo',
@@ -47,6 +49,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 150,
     seats: 2,
     transmission: 'Manual',
+    status: 'Maintenance',
     image: findImage('car-3'),
     specs: {
       engine: '4.0L V8',
@@ -62,6 +65,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 60,
     seats: 8,
     transmission: 'Automatic',
+    status: 'Available',
     image: findImage('car-4'),
     specs: {
       engine: 'Electric Motor',
@@ -77,6 +81,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 45,
     seats: 2,
     transmission: 'Manual',
+    status: 'Rented',
     image: findImage('moto-1'),
     specs: {
       engine: '500cc V-Twin',
@@ -92,6 +97,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 65,
     seats: 2,
     transmission: 'Manual',
+    status: 'Available',
     image: findImage('moto-2'),
     specs: {
       engine: '1200cc Parallel-Twin',
@@ -107,6 +113,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 30,
     seats: 1,
     transmission: 'Automatic',
+    status: 'Rented',
     image: findImage('moto-3'),
     specs: {
       engine: '150cc Single-Cylinder',
@@ -122,6 +129,7 @@ export const vehicles: Vehicle[] = [
     pricePerDay: 80,
     seats: 1,
     transmission: 'Manual',
+    status: 'Available',
     image: findImage('moto-4'),
     specs: {
       engine: '800cc Boxer',

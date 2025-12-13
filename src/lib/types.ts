@@ -7,6 +7,7 @@ export type Vehicle = {
   pricePerDay: number;
   seats: number;
   transmission: 'Automatic' | 'Manual';
+  status: 'Available' | 'Rented' | 'Maintenance';
   image: (typeof PlaceHolderImages)[number];
   specs: {
     engine: string;
