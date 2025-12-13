@@ -16,6 +16,13 @@ import { Input } from '@/components/ui/input';
 import { Mail, Phone } from 'lucide-react';
 import GoogleIcon from '@/components/icons/GoogleIcon';
 import FacebookIcon from '@/components/icons/FacebookIcon';
+import { useAuth } from '@/firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
@@ -23,6 +30,10 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const auth = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,9 +42,39 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Handle form submission
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: 'Signed In',
+        description: "You've successfully signed in.",
+      });
+      router.push('/');
+    } catch (error: any) {
+      if (error.code === 'auth/user-not-found') {
+        // If user not found, try to create a new account
+        try {
+          await createUserWithEmailAndPassword(auth, values.email, values.password);
+          toast({
+            title: 'Account Created',
+            description: "We've created a new account for you and signed you in.",
+          });
+          router.push('/');
+        } catch (signUpError: any) {
+          toast({
+            variant: 'destructive',
+            title: 'Uh oh! Something went wrong.',
+            description: signUpError.message,
+          });
+        }
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: error.message,
+        });
+      }
+    }
   }
 
   return (
@@ -66,7 +107,7 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full font-bold">Sign In with Email</Button>
+          <Button type="submit" className="w-full font-bold">Sign In or Sign Up</Button>
         </form>
       </Form>
       <div className="relative">
@@ -78,11 +119,11 @@ export default function LoginForm() {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-2">
-        <Button variant="outline"><Phone /> Sign In with Phone</Button>
+        <Button variant="outline" disabled><Phone /> Sign In with Phone</Button>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <Button variant="outline"><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
-        <Button variant="outline"><FacebookIcon className="mr-2 h-4 w-4" /> Facebook</Button>
+        <Button variant="outline" disabled><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
+        <Button variant="outline" disabled><FacebookIcon className="mr-2 h-4 w-4" /> Facebook</Button>
       </div>
     </div>
   );
