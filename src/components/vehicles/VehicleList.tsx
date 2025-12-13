@@ -2,15 +2,28 @@
 
 import { useState } from 'react';
 import { vehicles } from '@/lib/data';
-import VehicleCard from './VehicleCard';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
+import { Card } from '@/components/ui/card';
 
 export default function VehicleList() {
   const [filter, setFilter] = useState('All');
@@ -26,8 +39,8 @@ export default function VehicleList() {
         <TabsTrigger value="Car">Cars</TabsTrigger>
         <TabsTrigger value="Motorcycle">Motorcycles</TabsTrigger>
       </TabsList>
-      
-      <Card className='p-4'>
+
+      <Card className="p-4">
         <Table>
           <TableHeader>
             <TableRow>
@@ -37,9 +50,7 @@ export default function VehicleList() {
               <TableHead>Name</TableHead>
               <TableHead>Type</TableHead>
               <TableHead className="hidden md:table-cell">Price</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Seats
-              </TableHead>
+              <TableHead className="hidden md:table-cell">Seats</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
@@ -59,7 +70,10 @@ export default function VehicleList() {
                   />
                 </TableCell>
                 <TableCell className="font-medium">
-                  <Link href={`/vehicles/${vehicle.id}`} className="hover:underline">
+                  <Link
+                    href={`/vehicles/${vehicle.id}`}
+                    className="hover:underline"
+                  >
                     {vehicle.name}
                   </Link>
                 </TableCell>
@@ -86,8 +100,10 @@ export default function VehicleList() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                       <DropdownMenuItem asChild>
-                        <Link href={`/vehicles/${vehicle.id}`}>View Details</Link>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/vehicles/${vehicle.id}`}>
+                          View Details
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>Edit</DropdownMenuItem>
                       <DropdownMenuItem>Delete</DropdownMenuItem>
