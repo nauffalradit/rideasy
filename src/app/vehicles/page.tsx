@@ -36,8 +36,10 @@ export default function VehiclesPage() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Vehicle
+          <Button asChild>
+            <Link href="/vehicles/new">
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Vehicle
+            </Link>
           </Button>
         </div>
       </div>
