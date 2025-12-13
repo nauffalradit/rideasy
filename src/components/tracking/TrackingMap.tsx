@@ -31,9 +31,17 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
   if (!API_KEY) {
     return (
         <div className="w-full h-full flex items-center justify-center bg-muted">
-            <div className="text-center p-4">
-                <h2 className="text-lg font-semibold">Google Maps API Key is missing.</h2>
-                <p className="text-muted-foreground">Please add your key to the .env.local file to see the map.</p>
+            <div className="text-center p-8 border rounded-lg bg-background shadow-md">
+                <h2 className="text-xl font-bold text-destructive">Konfigurasi Peta Diperlukan</h2>
+                <p className="text-muted-foreground mt-2 max-w-md">
+                  Untuk menampilkan peta, Anda perlu menambahkan Google Maps API Key. Silakan buat file `.env.local` di root proyek Anda dan tambahkan baris berikut:
+                </p>
+                <pre className="mt-4 p-2 rounded-md bg-gray-100 text-sm text-left dark:bg-gray-800">
+                  <code>NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=KUNCI_API_ANDA_DISINI</code>
+                </pre>
+                 <p className="text-muted-foreground mt-2 text-xs">
+                  Pastikan untuk mengganti `KUNCI_API_ANDA_DISINI` dengan kunci API Anda yang sebenarnya dan restart server pengembangan.
+                </p>
             </div>
         </div>
     )
