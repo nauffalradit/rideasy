@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Phone } from 'lucide-react';
 import GoogleIcon from '@/components/icons/GoogleIcon';
 import { useAuth } from '@/firebase';
 import {
@@ -23,6 +22,7 @@ import {
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
@@ -33,6 +33,7 @@ export default function LoginForm() {
   const auth = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,21 +60,27 @@ export default function LoginForm() {
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       handleAuthSuccess();
     } catch (error: any) {
       handleAuthError(error, 'Sign In');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   async function handleGoogleSignIn() {
+    setIsSubmitting(true);
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
       handleAuthSuccess();
     } catch (error: any) {
       handleAuthError(error, 'Google Sign In');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -88,7 +95,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="you@example.com" {...field} />
+                  <Input placeholder="you@example.com" {...field} disabled={isSubmitting} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -101,13 +108,15 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
+                  <Input type="password" placeholder="••••••••" {...field} disabled={isSubmitting} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full font-bold">Sign In</Button>
+          <Button type="submit" className="w-full font-bold" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
+          </Button>
         </form>
       </Form>
       <div className="relative">
@@ -119,7 +128,9 @@ export default function LoginForm() {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-2">
-         <Button variant="outline" onClick={handleGoogleSignIn}><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
+         <Button variant="outline" onClick={handleGoogleSignIn} disabled={isSubmitting}>
+            <GoogleIcon className="mr-2 h-4 w-4" /> Google
+        </Button>
       </div>
     </div>
   );
