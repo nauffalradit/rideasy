@@ -40,7 +40,15 @@ export default function NewVehiclePage() {
             name: "",
             type: "Car",
             status: "Available",
+            pricePerDay: 0,
             seats: 4,
+            engine: "",
+            horsepower: 0,
+            fuelType: "Gasoline",
+            transmission: "Automatic",
+            description: "",
+            imageUrl: "",
+            galleryUrls: "",
         },
     });
 
