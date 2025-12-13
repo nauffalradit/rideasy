@@ -22,8 +22,18 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Globe, Palette, Bell, MapPin, Shield, Lock, Info } from 'lucide-react';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SettingsPage() {
+  const { toast } = useToast();
+
+  const handleSaveChanges = () => {
+    toast({
+      title: 'Pengaturan Disimpan',
+      description: 'Perubahan Anda telah berhasil disimpan.',
+    });
+  };
+
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="space-y-6">
@@ -143,15 +153,6 @@ export default function SettingsPage() {
                   </div>
                   <Switch defaultChecked />
                 </div>
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <Label className="text-base">Hapus Cache Aplikasi</Label>
-                     <p className="text-sm text-muted-foreground">
-                        Membersihkan data sementara untuk menyegarkan aplikasi.
-                    </p>
-                  </div>
-                  <Button variant="outline">Hapus Cache</Button>
-                </div>
                  <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <Label className="text-base">Kebijakan Privasi</Label>
@@ -265,7 +266,7 @@ export default function SettingsPage() {
             </Card>
           </div>
         </div>
-        <Button>Simpan Perubahan</Button>
+        <Button onClick={handleSaveChanges}>Simpan Perubahan</Button>
       </div>
     </div>
   );
