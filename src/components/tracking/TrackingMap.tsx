@@ -6,7 +6,7 @@ import type { RentedVehicle } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Image from 'next/image';
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY';
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 type TrackingMapProps = {
   vehicles: RentedVehicle[];
@@ -27,6 +27,17 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
       mapRef.current.panTo(selectedVehicle.location);
     }
   }, [selectedVehicle]);
+
+  if (!API_KEY) {
+    return (
+        <div className="w-full h-full flex items-center justify-center bg-muted">
+            <div className="text-center p-4">
+                <h2 className="text-lg font-semibold">Google Maps API Key is missing.</h2>
+                <p className="text-muted-foreground">Please add your key to the .env.local file to see the map.</p>
+            </div>
+        </div>
+    )
+  }
 
   return (
     <APIProvider apiKey={API_KEY}>
