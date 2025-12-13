@@ -1,6 +1,5 @@
 'use client';
 
-import { getVehicleById } from '@/lib/data';
 import { notFound, useParams } from 'next/navigation';
 import VehicleDetailsPage from '@/components/vehicles/VehicleDetailsPage';
 import {
@@ -15,15 +14,6 @@ import Link from 'next/link';
 import { useVehicles } from '@/context/VehicleContext';
 import { useEffect, useState } from 'react';
 import type { Vehicle } from '@/lib/types';
-
-// This is a workaround for generating metadata in a client component.
-// In a real app, this might be a server component fetching data.
-export async function generateMetadata() {
-  return {
-    title: 'Vehicle Details - Rideasy',
-    description: 'Details for a specific vehicle.',
-  };
-}
 
 export default function VehiclePage() {
   const params = useParams();
