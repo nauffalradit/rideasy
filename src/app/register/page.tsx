@@ -1,9 +1,9 @@
 import { Car } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import LoginForm from '@/components/auth/LoginForm';
+import RegisterForm from '@/components/auth/RegisterForm';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900/10">
       <Card className="w-full max-w-md shadow-xl">
@@ -11,15 +11,15 @@ export default function LoginPage() {
           <div className="flex justify-center items-center mb-4">
             <Car className="h-10 w-10 text-primary" />
           </div>
-          <CardTitle className="text-3xl font-headline">Welcome back to Rideasy</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardTitle className="text-3xl font-headline">Create an Account</CardTitle>
+          <CardDescription>Join Rideasy to start your journey</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm />
+          <RegisterForm />
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="underline">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/login" className="underline">
+              Sign in
             </Link>
           </div>
         </CardContent>

@@ -17,7 +17,7 @@ import { Phone } from 'lucide-react';
 import GoogleIcon from '@/components/icons/GoogleIcon';
 import { useAuth } from '@/firebase';
 import {
-  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
@@ -26,10 +26,10 @@ import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
-  password: z.string().min(1, { message: 'Password is required.' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const auth = useAuth();
   const { toast } = useToast();
   const router = useRouter();
@@ -44,8 +44,8 @@ export default function LoginForm() {
 
   const handleAuthSuccess = () => {
     toast({
-      title: 'Signed In',
-      description: `You've successfully signed in.`,
+      title: 'Account Created',
+      description: `You've successfully created an account.`,
     });
     router.push('/');
   };
@@ -60,10 +60,10 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
       handleAuthSuccess();
     } catch (error: any) {
-      handleAuthError(error, 'Sign In');
+      handleAuthError(error, 'Sign Up');
     }
   }
 
@@ -107,7 +107,7 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full font-bold">Sign In</Button>
+          <Button type="submit" className="w-full font-bold">Sign Up with Email</Button>
         </form>
       </Form>
       <div className="relative">
@@ -119,7 +119,8 @@ export default function LoginForm() {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-2">
-         <Button variant="outline" onClick={handleGoogleSignIn}><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
+        <Button variant="outline" onClick={handleGoogleSignIn}><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
+        <Button variant="outline" disabled><Phone /> Sign Up with Phone</Button>
       </div>
     </div>
   );
