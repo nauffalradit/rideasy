@@ -20,6 +20,8 @@ import { useAuth } from '@/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
@@ -42,38 +44,47 @@ export default function LoginForm() {
     },
   });
 
+  const handleAuthSuccess = (action: 'Signed In' | 'Account Created') => {
+    toast({
+      title: action,
+      description: `You've successfully ${action.toLowerCase()}.`,
+    });
+    router.push('/');
+  };
+
+  const handleAuthError = (error: any, context: string) => {
+    toast({
+      variant: 'destructive',
+      title: `Uh oh! ${context} failed.`,
+      description: error.message,
+    });
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
-      toast({
-        title: 'Signed In',
-        description: "You've successfully signed in.",
-      });
-      router.push('/');
+      handleAuthSuccess('Signed In');
     } catch (error: any) {
       if (error.code === 'auth/user-not-found') {
-        // If user not found, try to create a new account
         try {
           await createUserWithEmailAndPassword(auth, values.email, values.password);
-          toast({
-            title: 'Account Created',
-            description: "We've created a new account for you and signed you in.",
-          });
-          router.push('/');
+          handleAuthSuccess('Account Created');
         } catch (signUpError: any) {
-          toast({
-            variant: 'destructive',
-            title: 'Uh oh! Something went wrong.',
-            description: signUpError.message,
-          });
+          handleAuthError(signUpError, 'Sign Up');
         }
       } else {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: error.message,
-        });
+        handleAuthError(error, 'Sign In');
       }
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      handleAuthSuccess('Signed In');
+    } catch (error: any) {
+      handleAuthError(error, 'Google Sign In');
     }
   }
 
@@ -122,7 +133,7 @@ export default function LoginForm() {
         <Button variant="outline" disabled><Phone /> Sign In with Phone</Button>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <Button variant="outline" disabled><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
+        <Button variant="outline" onClick={handleGoogleSignIn}><GoogleIcon className="mr-2 h-4 w-4" /> Google</Button>
         <Button variant="outline" disabled><FacebookIcon className="mr-2 h-4 w-4" /> Facebook</Button>
       </div>
     </div>
