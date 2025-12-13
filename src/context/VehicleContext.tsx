@@ -1,25 +1,44 @@
+
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useMemo } from 'react';
 import { Vehicle } from '@/lib/types';
-import { initialVehicles } from '@/lib/data';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+
+// The data structure for a new vehicle, omitting the ID.
+type NewVehicleData = Omit<Vehicle, 'id'>;
 
 interface VehicleContextType {
   vehicles: Vehicle[];
-  addVehicle: (vehicle: Vehicle) => void;
+  isLoading: boolean;
+  addVehicle: (vehicle: NewVehicleData) => void;
 }
 
 const VehicleContext = createContext<VehicleContextType | undefined>(undefined);
 
 export const VehicleProvider = ({ children }: { children: ReactNode }) => {
-  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+  const firestore = useFirestore();
+  
+  const vehiclesCollection = useMemoFirebase(
+    () => collection(firestore, 'vehicles'),
+    [firestore]
+  );
+  
+  const { data: vehicles, isLoading } = useCollection<Omit<Vehicle, 'id'>>(vehiclesCollection);
 
-  const addVehicle = (vehicle: Vehicle) => {
-    setVehicles((prevVehicles) => [vehicle, ...prevVehicles]);
+  const addVehicle = (vehicleData: NewVehicleData) => {
+    addDocumentNonBlocking(vehiclesCollection, vehicleData);
   };
 
+  const vehicleList = useMemo(() => {
+    return vehicles ? vehicles.map(v => ({ ...v, id: v.id })) : [];
+  }, [vehicles]);
+
+
   return (
-    <VehicleContext.Provider value={{ vehicles, addVehicle }}>
+    <VehicleContext.Provider value={{ vehicles: vehicleList, addVehicle, isLoading }}>
       {children}
     </VehicleContext.Provider>
   );
@@ -32,3 +51,5 @@ export const useVehicles = () => {
   }
   return context;
 };
+
+    

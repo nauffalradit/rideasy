@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -24,14 +25,36 @@ import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { useVehicles } from '@/context/VehicleContext';
+import { Skeleton } from '../ui/skeleton';
 
 export default function VehicleList() {
-  const { vehicles } = useVehicles();
+  const { vehicles, isLoading } = useVehicles();
   const [filter, setFilter] = useState('All');
 
   const filteredVehicles = vehicles.filter(
     (vehicle) => filter === 'All' || vehicle.type === filter
   );
+  
+  if (isLoading) {
+    return (
+        <Card className="p-4">
+            <div className="space-y-3">
+                <Skeleton className="h-8 w-1/3 mx-auto" />
+                <Skeleton className="h-[50px] border-b" />
+                {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex items-center space-x-4 p-2">
+                        <Skeleton className="h-16 w-16 rounded-md" />
+                        <div className="flex-1 space-y-2">
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-4 w-1/4" />
+                        </div>
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                    </div>
+                ))}
+            </div>
+        </Card>
+    );
+  }
 
   return (
     <Tabs defaultValue="All" onValueChange={setFilter} className="w-full">
@@ -119,3 +142,5 @@ export default function VehicleList() {
     </Tabs>
   );
 }
+
+    

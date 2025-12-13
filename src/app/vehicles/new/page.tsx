@@ -29,7 +29,6 @@ const vehicleSchema = z.object({
   transmission: z.enum(['Automatic', 'Manual']),
   description: z.string().optional(),
   imageUrl: z.string().url("Please enter a valid URL").optional(),
-  galleryUrls: z.string().optional(),
 });
 
 export default function NewVehiclePage() {
@@ -51,23 +50,38 @@ export default function NewVehiclePage() {
             transmission: "Automatic",
             description: "",
             imageUrl: "",
-            galleryUrls: "",
         },
     });
 
     const onSubmit = (data: z.infer<typeof vehicleSchema>) => {
-        const newVehicle = {
-            id: String(Date.now()), // temporary unique id
-            ...data,
-            image: PlaceHolderImages.find(p => p.id === (data.type === 'Car' ? 'car-1' : 'moto-1'))!,
+        // Find a placeholder image based on type. In a real app, you'd handle image uploads.
+        const imagePlaceholder = PlaceHolderImages.find(p => p.id === (data.type === 'Car' ? 'car-1' : 'moto-1'))!;
+        
+        const newVehicleData = {
+            name: data.name,
+            type: data.type,
+            pricePerDay: data.pricePerDay,
+            seats: data.seats,
+            transmission: data.transmission,
+            status: data.status,
+            // Saving image info instead of the full object
+            image: {
+                imageUrl: data.imageUrl || imagePlaceholder.imageUrl,
+                description: imagePlaceholder.description,
+                imageHint: imagePlaceholder.imageHint,
+            },
+            // Saving specs info
             specs: {
                 engine: data.engine || 'N/A',
                 fuelType: data.fuelType || 'Gasoline',
                 horsepower: data.horsepower || 0,
             },
-            gallery: [],
+            // Gallery would be handled by an upload mechanism
+            gallery: [], 
         };
-        addVehicle(newVehicle);
+
+        addVehicle(newVehicleData);
+
         toast({
             title: "Vehicle Added",
             description: `${data.name} has been successfully added to your fleet.`,
@@ -297,21 +311,7 @@ export default function NewVehiclePage() {
                                                 <FormControl>
                                                     <div className="flex items-center gap-2">
                                                         <Input placeholder="https://example.com/image.png" {...field} />
-                                                        <Button variant="outline" size="icon" type="button"><Upload className="h-4 w-4"/></Button>
                                                     </div>
-                                                </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                 <FormField
-                                    control={form.control}
-                                    name="galleryUrls"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Image Gallery URLs</FormLabel>
-                                                <FormControl>
-                                                    <Textarea placeholder="Enter one image URL per line." {...field} />
                                                 </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -334,3 +334,6 @@ export default function NewVehiclePage() {
         </Form>
     </div>
   );
+}
+
+    

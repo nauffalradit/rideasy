@@ -1,4 +1,9 @@
-import type { PlaceHolderImages } from "./placeholder-images";
+
+export type VehicleImage = {
+  imageUrl: string;
+  description: string;
+  imageHint: string;
+};
 
 export type Vehicle = {
   id: string;
@@ -8,13 +13,13 @@ export type Vehicle = {
   seats: number;
   transmission: 'Automatic' | 'Manual';
   status: 'Available' | 'Rented' | 'Maintenance';
-  image: (typeof PlaceHolderImages)[number];
+  image: VehicleImage;
   specs: {
     engine: string;
     fuelType: 'Gasoline' | 'Electric' | 'Hybrid';
     horsepower: number;
   };
-  gallery: (typeof PlaceHolderImages)[number][];
+  gallery: VehicleImage[];
 };
 
 export type RentedVehicle = {
@@ -26,5 +31,7 @@ export type RentedVehicle = {
     lat: number;
     lng: number;
   };
-  image: (typeof PlaceHolderImages)[number];
+  image: VehicleImage;
 };
+
+    
