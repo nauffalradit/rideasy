@@ -1,12 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import type { RentedVehicle } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Image from 'next/image';
+import { icon } from 'leaflet';
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const ICON = icon({
+  iconUrl: "/marker.png",
+  iconSize: [32, 32],
+});
 
 type TrackingMapProps = {
   vehicles: RentedVehicle[];
@@ -14,88 +17,66 @@ type TrackingMapProps = {
   onVehicleSelect: (vehicle: RentedVehicle | null) => void;
 };
 
+// Component to handle map view changes
+const ChangeView = ({ center, zoom }: { center: [number, number], zoom: number }) => {
+  const map = useMap();
+  map.setView(center, zoom);
+  return null;
+}
+
 export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect }: TrackingMapProps) {
-  const mapCenter = selectedVehicle
-    ? selectedVehicle.location
-    : { lat: 38.685, lng: -97.822 }; // Center of US
-  
-  const mapRef = React.useRef(null);
-  
-  React.useEffect(() => {
-    if (selectedVehicle && mapRef.current) {
-      // @ts-ignore
-      mapRef.current.panTo(selectedVehicle.location);
-    }
-  }, [selectedVehicle]);
+  const mapCenter: [number, number] = selectedVehicle
+    ? [selectedVehicle.location.lat, selectedVehicle.location.lng]
+    : [38.685, -97.822]; // Center of US
 
-  if (!API_KEY) {
-    return (
-        <div className="w-full h-full flex items-center justify-center bg-muted">
-            <div className="text-center p-8 border rounded-lg bg-background shadow-md">
-                <h2 className="text-xl font-bold text-destructive">Konfigurasi Peta Diperlukan</h2>
-                <p className="text-muted-foreground mt-2 max-w-md">
-                  Untuk menampilkan peta, Anda perlu menambahkan Google Maps API Key. Silakan buat file `.env.local` di root proyek Anda dan tambahkan baris berikut:
-                </p>
-                <pre className="mt-4 p-2 rounded-md bg-gray-100 text-sm text-left dark:bg-gray-800">
-                  <code>NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=KUNCI_API_ANDA_DISINI</code>
-                </pre>
-                 <p className="text-muted-foreground mt-2 text-xs">
-                  Pastikan untuk mengganti `KUNCI_API_ANDA_DISINI` dengan kunci API Anda yang sebenarnya dan restart server pengembangan.
-                </p>
-            </div>
-        </div>
-    )
-  }
+  const zoomLevel = selectedVehicle ? 15 : 4;
 
+  // Leaflet needs a defined height to render.
+  // The parent container `w-full h-full` should provide this.
   return (
-    <APIProvider apiKey={API_KEY}>
-      <Map
-        ref={mapRef}
-        defaultZoom={selectedVehicle ? 15 : 4}
-        zoom={selectedVehicle ? 15 : 4}
-        center={mapCenter}
-        mapId="rideasy_map"
-        gestureHandling={'greedy'}
-        disableDefaultUI={true}
-        className='w-full h-full'
-        style={{ width: '100%', height: '100%' }}
-      >
-        {vehicles.map((vehicle) => (
-          <AdvancedMarker
-            key={vehicle.id}
-            position={vehicle.location}
-            onClick={() => onVehicleSelect(vehicle)}
-          >
-            <Pin background={'#77DD77'} glyphColor={'#FFF'} borderColor={'#FFF'} />
-          </AdvancedMarker>
-        ))}
-        {selectedVehicle && (
-          <InfoWindow
-            position={selectedVehicle.location}
-            onCloseClick={() => onVehicleSelect(null)}
-          >
-            <div className="p-1 max-w-xs">
-              <div className="flex items-center gap-4">
-                <Image
-                  src={selectedVehicle.image.imageUrl}
-                  alt={selectedVehicle.image.description}
-                  width={80}
-                  height={60}
-                  className="rounded-md object-cover"
-                  data-ai-hint={selectedVehicle.image.imageHint}
-                />
-                <div>
-                  <h3 className="font-bold">{selectedVehicle.name}</h3>
-                  <p className="text-sm">Plate: {selectedVehicle.plate}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Lat: {selectedVehicle.location.lat.toFixed(4)}, Lng: {selectedVehicle.location.lng.toFixed(4)}
-                  </p>
-                </div>
+    <MapContainer center={mapCenter} zoom={zoomLevel} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+       <ChangeView center={mapCenter} zoom={zoomLevel} />
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {vehicles.map((vehicle) => (
+        <Marker
+          key={vehicle.id}
+          position={[vehicle.location.lat, vehicle.location.lng]}
+          icon={ICON}
+          eventHandlers={{
+            click: () => {
+              onVehicleSelect(vehicle);
+            },
+          }}
+        >
+        </Marker>
+      ))}
+
+      {selectedVehicle && (
+        <Popup position={[selectedVehicle.location.lat, selectedVehicle.location.lng]}>
+          <div className="p-1 max-w-xs">
+            <div className="flex items-center gap-4">
+              <Image
+                src={selectedVehicle.image.imageUrl}
+                alt={selectedVehicle.image.description}
+                width={80}
+                height={60}
+                className="rounded-md object-cover"
+                data-ai-hint={selectedVehicle.image.imageHint}
+              />
+              <div>
+                <h3 className="font-bold">{selectedVehicle.name}</h3>
+                <p className="text-sm">Plate: {selectedVehicle.plate}</p>
+                <p className="text-xs text-muted-foreground">
+                  Lat: {selectedVehicle.location.lat.toFixed(4)}, Lng: {selectedVehicle.location.lng.toFixed(4)}
+                </p>
               </div>
             </div>
-          </InfoWindow>
-        )}
-      </Map>
-    </APIProvider>
+          </div>
+        </Popup>
+      )}
+    </MapContainer>
   );
 }
