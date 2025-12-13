@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -6,7 +7,6 @@ import * as z from 'zod';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -77,15 +77,15 @@ export default function NewVehiclePage() {
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-        <div className="flex items-center gap-4">
-             <Button variant="outline" size="icon" className="h-7 w-7" asChild>
+        <div className="flex items-center gap-4 mb-6">
+             <Button variant="outline" size="icon" className="h-8 w-8" asChild>
                 <Link href="/vehicles">
                     <ArrowLeft className="h-4 w-4" />
                     <span className="sr-only">Back</span>
                 </Link>
              </Button>
             <div>
-                <h2 className="text-3xl font-bold tracking-tight">Add New Vehicle</h2>
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Add New Vehicle</h2>
                 <p className="text-muted-foreground">Fill in the details below to add a new vehicle to your fleet.</p>
             </div>
         </div>
@@ -264,6 +264,7 @@ export default function NewVehiclePage() {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Pricing</CardTitle>
+                                <CardDescription>Set the daily rental rate.</CardDescription>
                             </CardHeader>
                             <CardContent>
                                  <FormField
@@ -292,10 +293,10 @@ export default function NewVehiclePage() {
                                     name="imageUrl"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Main Image</FormLabel>
+                                            <FormLabel>Main Image URL</FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center gap-2">
-                                                        <Input placeholder="Enter image URL" {...field} />
+                                                        <Input placeholder="https://example.com/image.png" {...field} />
                                                         <Button variant="outline" size="icon" type="button"><Upload className="h-4 w-4"/></Button>
                                                     </div>
                                                 </FormControl>
@@ -308,7 +309,7 @@ export default function NewVehiclePage() {
                                     name="galleryUrls"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Image Gallery</FormLabel>
+                                            <FormLabel>Image Gallery URLs</FormLabel>
                                                 <FormControl>
                                                     <Textarea placeholder="Enter one image URL per line." {...field} />
                                                 </FormControl>
@@ -319,14 +320,17 @@ export default function NewVehiclePage() {
                             </CardContent>
                         </Card>
 
-                        <div className="flex justify-end gap-2">
+                        <div className="hidden lg:flex justify-end gap-2">
                             <Button variant="outline" type="button" onClick={() => router.push('/vehicles')}>Cancel</Button>
                             <Button type="submit">Save Vehicle</Button>
                         </div>
                     </div>
                 </div>
+                 <div className="mt-8 flex justify-end gap-2 lg:hidden">
+                    <Button variant="outline" type="button" onClick={() => router.push('/vehicles')} className="w-full sm:w-auto">Cancel</Button>
+                    <Button type="submit" className="w-full sm:w-auto">Save Vehicle</Button>
+                </div>
             </form>
         </Form>
     </div>
   );
-}
