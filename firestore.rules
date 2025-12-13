@@ -1,0 +1,102 @@
+/**
+ * Core Philosophy: This ruleset enforces a strict user-ownership model for personal data and a public-read model for shared data.
+ * All user-specific information, such as profiles and rental orders, is locked down so that a user can only ever access their own documents.
+ * Publicly browsable data, like the vehicle catalog, is readable by any authenticated user, but write operations are restricted to prevent unauthorized modifications.
+ *
+ * Data Structure: The data is organized into two main top-level collections: `/users` and `/vehicles`.
+ * - The `/users/{userId}` collection contains user profile documents and nests all user-specific data, such as `/rental_orders`, in subcollections.
+ * - The `/vehicles/{vehicleId}` collection contains the public vehicle catalog and nests related, but more sensitive, data like `/gps_readings`.
+ * This structure leverages Firestore's path-based security to create clear and performant rules.
+ *
+ * Key Security Decisions:
+ * - User data is strictly private. A user can only access documents under their own `/users/{userId}` path. Listing users from the root `/users` collection is explicitly forbidden to protect user privacy.
+ * - Public data is read-only for regular users. All authenticated users can list and view vehicles, but creating, updating, or deleting them is disabled pending the implementation of an admin role system.
+ * - Sensitive data, like GPS readings, is locked down by default. Access is denied for all operations until a clear and secure access pattern (e.g., for vehicle owners or service accounts) is defined in the application logic.
+ *
+ * Denormalization for Authorization: To ensure fast and simple authorization checks, rules rely on data within the document being accessed or its path.
+ * - User-specific data uses the path (`/users/{userId}`) to determine ownership, avoiding the need for extra database reads.
+ * - On document creation, we validate that the internal `userId` field matches the `userId` in the document path (e.g., in a new RentalOrder), ensuring relational integrity from the start. This `userId` field is then enforced as immutable.
+ *
+ * Structural Segregation: User data (`/users`) and public data (`/vehicles`) are in separate top-level collections. This clear separation allows for simple, high-level rules; for instance, the entire `/users` collection can be protected with an ownership check, while the `/vehicles` collection can be made broadly readable.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for reusable logic
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Checks if the requesting user's UID matches the given userId
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Checks for ownership on an existing document. Used for update/delete.
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description   Manages user profile documents.
+     * @path          /users/{userId}
+     * @allow         (create) A new user can create their own profile document.
+     * @allow         (get, update) An authenticated user can read or update their own profile.
+     * @deny          (get, list) An authenticated user cannot read or list other users' profiles.
+     * @principle     Restricts access to a user's own data tree and prevents user enumeration.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+
+      /**
+       * @description   Manages a user's rental orders.
+       * @path          /users/{userId}/rental_orders/{rentalOrderId}
+       * @allow         (create, get, list, update, delete) A user can manage their own rental orders.
+       * @deny          (get) A user cannot access another user's rental orders.
+       * @principle     Enforces data ownership through path hierarchy. All documents in this subcollection belong to the parent user.
+       */
+      match /rental_orders/{rentalOrderId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+    }
+
+    /**
+     * @description   Manages the public catalog of vehicles available for rent.
+     * @path          /vehicles/{vehicleId}
+     * @allow         (get, list) Any authenticated user can view the list of available vehicles.
+     * @deny          (create, update, delete) All write operations are denied for regular users.
+     * @principle     Implements a "Public Read with Restricted Writes" pattern. Writes are disabled pending an admin role implementation.
+     */
+    match /vehicles/{vehicleId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+      allow create: if false; // TODO: Implement admin-only access control.
+      allow update: if false; // TODO: Implement admin-only access control.
+      allow delete: if false; // TODO: Implement admin-only access control.
+
+      /**
+       * @description   Stores sensitive GPS location data for a vehicle.
+       * @path          /vehicles/{vehicleId}/gps_readings/{gpsReadingId}
+       * @allow         (none) All access is denied by default.
+       * @deny          (get, create) All users are denied access to this sensitive location data.
+       * @principle     Applies a "deny-by-default" posture for highly sensitive data until a secure access pattern is explicitly defined.
+       */
+      match /gps_readings/{gpsReadingId} {
+        allow get: if false; // TODO: Define who can read location data (e.g., user with an active rental).
+        allow list: if false; // TODO: Define who can list location data.
+        allow create: if false; // TODO: Define who can write location data (e.g., IoT device service account).
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+  }
+}
