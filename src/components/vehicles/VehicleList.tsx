@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { vehicles } from '@/lib/data';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
@@ -24,8 +23,10 @@ import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
+import { useVehicles } from '@/context/VehicleContext';
 
 export default function VehicleList() {
+  const { vehicles } = useVehicles();
   const [filter, setFilter] = useState('All');
 
   const filteredVehicles = vehicles.filter(

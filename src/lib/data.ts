@@ -9,7 +9,7 @@ const findImage = (id: string) => {
   return image;
 };
 
-export const vehicles: Vehicle[] = [
+export const initialVehicles: Vehicle[] = [
   {
     id: '1',
     name: 'Urban Cruiser',
@@ -168,5 +168,6 @@ export const rentedVehicles: RentedVehicle[] = [
 ];
 
 export const getVehicleById = (id: string) => {
-    return vehicles.find(v => v.id === id);
+    // This function will need to be updated to use the VehicleContext
+    return initialVehicles.find(v => v.id === id);
 }

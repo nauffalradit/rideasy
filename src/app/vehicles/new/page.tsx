@@ -14,6 +14,8 @@ import { ArrowLeft, Car, Bike, Sparkles, Fuel, Gauge, Users, GitCommitHorizontal
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useVehicles } from '@/context/VehicleContext';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const vehicleSchema = z.object({
   name: z.string().min(1, "Vehicle name is required"),
@@ -24,7 +26,7 @@ const vehicleSchema = z.object({
   engine: z.string().optional(),
   horsepower: z.coerce.number().optional(),
   fuelType: z.enum(['Gasoline', 'Electric', 'Hybrid']).optional(),
-  transmission: z.enum(['Automatic', 'Manual']).optional(),
+  transmission: z.enum(['Automatic', 'Manual']),
   description: z.string().optional(),
   imageUrl: z.string().url("Please enter a valid URL").optional(),
   galleryUrls: z.string().optional(),
@@ -33,6 +35,7 @@ const vehicleSchema = z.object({
 export default function NewVehiclePage() {
     const router = useRouter();
     const { toast } = useToast();
+    const { addVehicle } = useVehicles();
 
     const form = useForm<z.infer<typeof vehicleSchema>>({
         resolver: zodResolver(vehicleSchema),
@@ -53,8 +56,18 @@ export default function NewVehiclePage() {
     });
 
     const onSubmit = (data: z.infer<typeof vehicleSchema>) => {
-        // Here you would typically handle form submission, e.g., send data to an API
-        console.log(data);
+        const newVehicle = {
+            id: String(Date.now()), // temporary unique id
+            ...data,
+            image: PlaceHolderImages.find(p => p.id === (data.type === 'Car' ? 'car-1' : 'moto-1'))!,
+            specs: {
+                engine: data.engine || 'N/A',
+                fuelType: data.fuelType || 'Gasoline',
+                horsepower: data.horsepower || 0,
+            },
+            gallery: [],
+        };
+        addVehicle(newVehicle);
         toast({
             title: "Vehicle Added",
             description: `${data.name} has been successfully added to your fleet.`,
