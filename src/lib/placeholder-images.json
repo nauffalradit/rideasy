@@ -1,3 +1,82 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "Scenic road for hero banner",
+      "imageUrl": "https://images.unsplash.com/photo-1498637841888-108c6b723fcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3aW5kaW5nJTIwcm9hZHxlbnwwfHx8fDE3NjU1MzA2ODF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "winding road"
+    },
+    {
+      "id": "car-1",
+      "description": "Modern white sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1669254382128-9fdc409000d5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aGl0ZSUyMHNlZGFufGVufDB8fHx8MTc2NTYyNDc2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "white sedan"
+    },
+    {
+      "id": "car-2",
+      "description": "Red compact SUV",
+      "imageUrl": "https://images.unsplash.com/photo-1747414632749-6c8b14ba30fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZWQlMjBzdXZ8ZW58MHx8fHwxNzY1NTI2MzY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "red suv"
+    },
+    {
+      "id": "car-3",
+      "description": "Sleek black sports car",
+      "imageUrl": "https://images.unsplash.com/photo-1668037069509-ba4c569475b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxibGFjayUyMHNwb3J0cyUyMGNhcnxlbnwwfHx8fDE3NjU2MjQ3Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "black sports car"
+    },
+    {
+      "id": "car-4",
+      "description": "Blue family minivan",
+      "imageUrl": "https://images.unsplash.com/photo-1649553324097-dec0c232be42?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxibHVlJTIwbWluaXZhbnxlbnwwfHx8fDE3NjU2MjQ3Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue minivan"
+    },
+    {
+      "id": "moto-1",
+      "description": "Red and black sport motorcycle",
+      "imageUrl": "https://images.unsplash.com/photo-1677911192988-662ac4443307?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcG9ydCUyMG1vdG9yY3ljbGV8ZW58MHx8fHwxNzY1NjI0NzY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sport motorcycle"
+    },
+    {
+      "id": "moto-2",
+      "description": "Classic cruiser motorcycle",
+      "imageUrl": "https://images.unsplash.com/photo-1763380270054-fad681b11348?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjcnVpc2VyJTIwbW90b3JjeWNsZXxlbnwwfHx8fDE3NjU2MjQ3Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cruiser motorcycle"
+    },
+    {
+      "id": "moto-3",
+      "description": "Modern city scooter",
+      "imageUrl": "https://images.unsplash.com/photo-1642016254209-f4e9281de1e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjaXR5JTIwc2Nvb3RlcnxlbnwwfHx8fDE3NjU2MjQ3Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city scooter"
+    },
+    {
+      "id": "moto-4",
+      "description": "Adventure touring motorcycle",
+      "imageUrl": "https://images.unsplash.com/photo-1629294148914-678ba902dd49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhZHZlbnR1cmUlMjBtb3RvcmN5Y2xlfGVufDB8fHx8MTc2NTYyNDc2OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "adventure motorcycle"
+    },
+    {
+      "id": "gallery-car-1-1",
+      "description": "Interior of modern white sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1629280878139-038999084e23?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYXIlMjBpbnRlcmlvcnxlbnwwfHx8fDE3NjU1NjYzOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "car interior"
+    },
+    {
+      "id": "gallery-car-1-2",
+      "description": "Dashboard of modern white sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1615153633779-5c932c7f4cad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYXIlMjBkYXNoYm9hcmR8ZW58MHx8fHwxNzY1NTY2Mzk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "car dashboard"
+    },
+    {
+      "id": "gallery-moto-1-1",
+      "description": "Close up of sport motorcycle engine",
+      "imageUrl": "https://images.unsplash.com/photo-1676247122495-97eea5629e64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb3RvcmN5Y2xlJTIwZW5naW5lfGVufDB8fHx8MTc2NTYxNTU2OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "motorcycle engine"
+    },
+    {
+      "id": "gallery-moto-1-2",
+      "description": "Handlebars of a sport motorcycle",
+      "imageUrl": "https://images.unsplash.com/photo-1600887926867-a2c70b7d8391?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb3RvcmN5Y2xlJTIwaGFuZGxlYmFyc3xlbnwwfHx8fDE3NjU2MjQ3Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "motorcycle handlebars"
+    }
+  ]
 }
