@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { Vehicle } from '@/lib/types';
-import { ArrowRight, Car, Motorcycle } from 'lucide-react';
+import { ArrowRight, Car, Bike } from 'lucide-react';
 
 type VehicleCardProps = {
   vehicle: Vehicle;
@@ -29,7 +29,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         <div className="flex justify-between items-start">
             <CardTitle className="text-xl font-headline mb-2">{vehicle.name}</CardTitle>
             <Badge variant="secondary" className="flex items-center gap-1">
-                {vehicle.type === 'Car' ? <Car size={16} /> : <Motorcycle size={16} />}
+                {vehicle.type === 'Car' ? <Car size={16} /> : <Bike size={16} />}
                 {vehicle.type}
             </Badge>
         </div>

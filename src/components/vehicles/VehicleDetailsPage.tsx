@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Car, Fuel, Gauge, Users, GitCommitHorizontal, Sparkles, Zap } from 'lucide-react';
+import { Car, Fuel, Gauge, Users, GitCommitHorizontal, Sparkles, Zap, Bike } from 'lucide-react';
 import BookingForm from './BookingForm';
 
 type VehicleDetailsPageProps = {
@@ -75,7 +75,7 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
                 <div className="flex justify-between items-center mb-2">
                     <h1 className="text-4xl font-bold font-headline">{vehicle.name}</h1>
                     <Badge variant="secondary" className="flex items-center gap-2 text-lg py-1 px-3">
-                        {vehicle.type === 'Car' ? <Car size={20} /> : <Car size={20} />}
+                        {vehicle.type === 'Car' ? <Car size={20} /> : <Bike size={20} />}
                         {vehicle.type}
                     </Badge>
                 </div>
