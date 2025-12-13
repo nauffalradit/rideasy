@@ -34,13 +34,14 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
 
   return (
     <MapContainer 
+        key="tracking-map"
         center={mapCenter} 
         zoom={zoomLevel} 
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%' }}
         className="z-0"
         // placeholder component to prevent re-initialization issues
-        placeholder={<div className="w-full h-full bg-muted animate-pulse" />}
+        // placeholder={<div className="w-full h-full bg-muted animate-pulse" />}
     >
        <ChangeView center={mapCenter} zoom={zoomLevel} />
       <TileLayer
