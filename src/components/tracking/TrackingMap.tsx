@@ -17,24 +17,31 @@ type TrackingMapProps = {
   onVehicleSelect: (vehicle: RentedVehicle | null) => void;
 };
 
-// Component to handle map view changes
+// Component to handle map view changes without re-rendering the whole map
 const ChangeView = ({ center, zoom }: { center: [number, number], zoom: number }) => {
   const map = useMap();
-  map.setView(center, zoom);
+  React.useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);
   return null;
 }
 
 export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect }: TrackingMapProps) {
   const mapCenter: [number, number] = selectedVehicle
     ? [selectedVehicle.location.lat, selectedVehicle.location.lng]
-    : [38.685, -97.822]; // Center of US
+    : [38.685, -97.822]; // Default to center of US if no vehicle is selected
 
   const zoomLevel = selectedVehicle ? 15 : 4;
 
-  // Leaflet needs a defined height to render.
-  // The parent container `w-full h-full` should provide this.
   return (
-    <MapContainer center={mapCenter} zoom={zoomLevel} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+    <MapContainer 
+        center={mapCenter} 
+        zoom={zoomLevel} 
+        scrollWheelZoom={true} 
+        style={{ height: '100%', width: '100%' }}
+        // placeholder component to prevent re-initialization issues
+        placeholder={<div className="w-full h-full bg-muted animate-pulse" />}
+    >
        <ChangeView center={mapCenter} zoom={zoomLevel} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
