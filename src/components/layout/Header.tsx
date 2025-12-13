@@ -74,9 +74,9 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2">
           {isUserLoading ? (
-            <div className="h-8 w-20 animate-pulse rounded-md bg-muted" />
+            <div className="h-8 w-28 animate-pulse rounded-md bg-muted" />
           ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -104,9 +104,14 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild>
-              <Link href="/login">Login</Link>
-            </Button>
+            <div className='flex items-center gap-2'>
+               <Button asChild variant="ghost">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/register">Register</Link>
+              </Button>
+            </div>
           )}
           <div className="md:hidden">
             <Sheet>
