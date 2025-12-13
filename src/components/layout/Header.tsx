@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Car, LogOut, LayoutDashboard, CarFront, Users, MapPin, Settings, User as UserIcon } from 'lucide-react';
+import { Menu, Car, LogOut, LayoutDashboard, CarFront, MapPin, Settings, User as UserIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useUser, useAuth } from '@/firebase';
@@ -23,7 +23,6 @@ const navLinks = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/vehicles', label: 'Vehicles', icon: CarFront },
   { href: '/tracking', label: 'Live Map', icon: MapPin },
-  { href: '/users', label: 'Users', icon: Users },
 ];
 
 export default function Header() {
@@ -90,12 +89,6 @@ export default function Header() {
             <div className="h-8 w-28 animate-pulse rounded-md bg-muted" />
           ) : user ? (
             <>
-              <Button variant="ghost" size="icon" asChild>
-                <Link href="/settings">
-                  <Settings className="h-5 w-5" />
-                  <span className="sr-only">Settings</span>
-                </Link>
-              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
