@@ -1,14 +1,24 @@
 'use client';
 
 import * as React from 'react';
-import TrackingMap from '@/components/tracking/TrackingMap';
+import dynamic from 'next/dynamic';
 import { rentedVehicles as initialRentedVehicles } from '@/lib/data';
 import type { RentedVehicle } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { MapPin } from 'lucide-react';
+import { MapPin, Loader2 } from 'lucide-react';
+
+const TrackingMap = dynamic(() => import('@/components/tracking/TrackingMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-muted">
+      <Loader2 className="animate-spin h-8 w-8 text-primary" />
+      <p className="ml-2">Memuat peta...</p>
+    </div>
+  ),
+});
 
 export default function TrackingPage() {
   const [rentedVehicles] = React.useState<RentedVehicle[]>(initialRentedVehicles);
@@ -20,10 +30,13 @@ export default function TrackingPage() {
   );
 
   React.useEffect(() => {
+    // In a real app, you might use WebSockets for real-time updates.
+    // For this demo, we simulate vehicle movement.
     const interval = setInterval(() => {
         setVehiclePositions(prev => {
             const newPositions = {...prev};
             for(const id in newPositions) {
+                // Simulate slight random movement
                 newPositions[id] = {
                     lat: newPositions[id].lat + (Math.random() - 0.5) * 0.001,
                     lng: newPositions[id].lng + (Math.random() - 0.5) * 0.001,
