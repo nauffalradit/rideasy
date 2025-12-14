@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import type { RentedVehicle } from '@/lib/types';
-import { icon } from 'leaflet';
+import { icon, type Map as LeafletMap } from 'leaflet';
 
 const ICON = icon({
   iconUrl: "/marker.png",
@@ -16,8 +16,8 @@ type TrackingMapProps = {
   onVehicleSelect: (vehicle: RentedVehicle | null) => void;
 };
 
-// Component to handle map view changes without re-rendering the whole map
-const ChangeView = ({ center, zoom }: { center: [number, number], zoom: number }) => {
+// This component will now imperatively control the map view.
+function MapController({ center, zoom }: { center: [number, number], zoom: number }) {
   const map = useMap();
   React.useEffect(() => {
     map.setView(center, zoom);
@@ -34,16 +34,12 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
 
   return (
     <MapContainer 
-        key="tracking-map"
         center={mapCenter} 
         zoom={zoomLevel} 
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%' }}
         className="z-0"
-        // placeholder component to prevent re-initialization issues
-        // placeholder={<div className="w-full h-full bg-muted animate-pulse" />}
     >
-       <ChangeView center={mapCenter} zoom={zoomLevel} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -61,6 +57,7 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
         >
         </Marker>
       ))}
+      <MapController center={mapCenter} zoom={zoomLevel} />
     </MapContainer>
   );
 }
