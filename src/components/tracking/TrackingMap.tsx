@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import type { RentedVehicle } from '@/lib/types';
-import { icon, type Map as LeafletMap } from 'leaflet';
+import { icon } from 'leaflet';
 
 const ICON = icon({
   iconUrl: "/marker.png",
@@ -16,26 +16,28 @@ type TrackingMapProps = {
   onVehicleSelect: (vehicle: RentedVehicle | null) => void;
 };
 
-// This component will now imperatively control the map view.
-function MapController({ center, zoom }: { center: [number, number], zoom: number }) {
+// This component will imperatively control the map's view (center and zoom).
+function MapController({ vehicle }: { vehicle: RentedVehicle | null }) {
   const map = useMap();
+  
   React.useEffect(() => {
-    map.setView(center, zoom);
-  }, [center, zoom, map]);
-  return null;
+    if (vehicle) {
+      map.setView([vehicle.location.lat, vehicle.location.lng], 15);
+    }
+  }, [vehicle, map]);
+
+  return null; // This component does not render anything itself.
 }
 
 export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect }: TrackingMapProps) {
-  const mapCenter: [number, number] = selectedVehicle
-    ? [selectedVehicle.location.lat, selectedVehicle.location.lng]
-    : [38.685, -97.822]; // Default to center of US if no vehicle is selected
-
-  const zoomLevel = selectedVehicle ? 15 : 4;
+  // Set a default, static center for the initial map load.
+  const initialCenter: [number, number] = [38.685, -97.822];
+  const initialZoom = 4;
 
   return (
     <MapContainer 
-        center={mapCenter} 
-        zoom={zoomLevel} 
+        center={initialCenter} 
+        zoom={initialZoom} 
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%' }}
         className="z-0"
@@ -57,7 +59,8 @@ export default function TrackingMap({ vehicles, selectedVehicle, onVehicleSelect
         >
         </Marker>
       ))}
-      <MapController center={mapCenter} zoom={zoomLevel} />
+      {/* The MapController component will handle view changes without re-rendering MapContainer */}
+      <MapController vehicle={selectedVehicle} />
     </MapContainer>
   );
 }
