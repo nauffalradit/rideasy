@@ -23,24 +23,30 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Globe, Palette, Bell, MapPin, Shield, Lock, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/use-translation';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function SettingsPage() {
   const { toast } = useToast();
+  const { t } = useTranslation();
+  const { language, setLanguage } = useLanguage();
 
   const handleSaveChanges = () => {
     toast({
-      title: 'Pengaturan Disimpan',
-      description: 'Perubahan Anda telah berhasil disimpan.',
+      title: t('settingsSavedTitle'),
+      description: t('settingsSavedDesc'),
     });
+    // Optional: force a reload if needed, though context should update UI.
+    window.location.reload();
   };
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Pengaturan</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{t('settings')}</h2>
           <p className="text-muted-foreground">
-            Kelola preferensi akun dan aplikasi Anda.
+            {t('settingsDesc')}
           </p>
         </div>
         <Separator />
@@ -54,9 +60,9 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3">
                   <Bell className="w-6 h-6" />
                   <div>
-                    <CardTitle>Notifikasi</CardTitle>
+                    <CardTitle>{t('notifications')}</CardTitle>
                     <CardDescription>
-                      User pegang kendali, tidak berisik.
+                      {t('notificationsDesc')}
                     </CardDescription>
                   </div>
                 </div>
@@ -64,28 +70,28 @@ export default function SettingsPage() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label className="text-base">Aktifkan Semua Notifikasi</Label>
+                    <Label className="text-base">{t('enableAllNotifications')}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Satu tombol untuk mengontrol semua notifikasi.
+                      {t('enableAllNotificationsDesc')}
                     </p>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label>Reminder Jatuh Tempo Sewa</Label>
+                    <Label>{t('rentalDueReminder')}</Label>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label>Notifikasi Telat Pengembalian</Label>
+                    <Label>{t('lateReturnNotification')}</Label>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label>Notifikasi Status Booking</Label>
+                    <Label>{t('bookingStatusNotification')}</Label>
                   </div>
                   <Switch />
                 </div>
@@ -98,9 +104,9 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-6 h-6" />
                   <div>
-                    <CardTitle>Lokasi & Tracking</CardTitle>
+                    <CardTitle>{t('locationAndTracking')}</CardTitle>
                     <CardDescription>
-                      Transparan, tidak terasa “mengintai” 📍
+                      {t('locationAndTrackingDesc')}
                     </CardDescription>
                   </div>
                 </div>
@@ -108,26 +114,26 @@ export default function SettingsPage() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label className="text-base">Izinkan Akses Lokasi</Label>
+                    <Label className="text-base">{t('allowLocationAccess')}</Label>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="rounded-lg border p-4 space-y-2">
-                    <Label className="text-base">Refresh Lokasi Real-time</Label>
+                    <Label className="text-base">{t('realtimeLocationRefresh')}</Label>
                      <RadioGroup defaultValue="active" className="flex flex-col space-y-1">
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="active" id="loc-active" />
-                            <Label htmlFor="loc-active">Aktif</Label>
+                            <Label htmlFor="loc-active">{t('active')}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="saver" id="loc-saver" />
-                            <Label htmlFor="loc-saver">Hemat Baterai</Label>
+                            <Label htmlFor="loc-saver">{t('batterySaver')}</Label>
                         </div>
                     </RadioGroup>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="gps-interval">Interval Update GPS (detik)</Label>
-                    <Input id="gps-interval" type="number" placeholder="Contoh: 5" defaultValue={5}/>
+                    <Label htmlFor="gps-interval">{t('gpsUpdateInterval')}</Label>
+                    <Input id="gps-interval" type="number" placeholder={t('gpsIntervalPlaceholder')} defaultValue={5}/>
                 </div>
               </CardContent>
             </Card>
@@ -138,26 +144,26 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3">
                   <Shield className="w-6 h-6" />
                   <div>
-                    <CardTitle>Privasi & Data</CardTitle>
-                    <CardDescription>Rapi dan aman.</CardDescription>
+                    <CardTitle>{t('privacyAndData')}</CardTitle>
+                    <CardDescription>{t('privacyAndDataDesc')}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                  <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label className="text-base">Persetujuan Pelacakan Kendaraan</Label>
+                    <Label className="text-base">{t('vehicleTrackingConsent')}</Label>
                     <p className="text-sm text-muted-foreground">
-                        Data lokasi hanya digunakan selama masa sewa aktif.
+                        {t('vehicleTrackingConsentDesc')}
                     </p>
                   </div>
                   <Switch defaultChecked />
                 </div>
                  <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label className="text-base">Kebijakan Privasi</Label>
+                    <Label className="text-base">{t('privacyPolicy')}</Label>
                   </div>
-                  <Button variant="secondary" asChild><Link href="/privacy-policy">Lihat</Link></Button>
+                  <Button variant="secondary" asChild><Link href="/privacy-policy">{t('view')}</Link></Button>
                 </div>
               </CardContent>
             </Card>
@@ -172,15 +178,15 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3">
                   <Globe className="w-6 h-6" />
                   <div>
-                    <CardTitle>Bahasa</CardTitle>
-                    <CardDescription>Pilih bahasa antarmuka.</CardDescription>
+                    <CardTitle>{t('language')}</CardTitle>
+                    <CardDescription>{t('languageDesc')}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <Select defaultValue="id">
+                <Select value={language} onValueChange={(value) => setLanguage(value as 'en' | 'id')}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Pilih bahasa" />
+                    <SelectValue placeholder={t('languagePlaceholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="id">Bahasa Indonesia</SelectItem>
@@ -196,8 +202,8 @@ export default function SettingsPage() {
                  <div className="flex items-center gap-3">
                     <Palette className="w-6 h-6" />
                     <div>
-                        <CardTitle>Tema Tampilan</CardTitle>
-                        <CardDescription>Mata aman, baterai senang 🌙</CardDescription>
+                        <CardTitle>{t('displayTheme')}</CardTitle>
+                        <CardDescription>{t('displayThemeDesc')}</CardDescription>
                     </div>
                 </div>
               </CardHeader>
@@ -205,15 +211,15 @@ export default function SettingsPage() {
                 <RadioGroup defaultValue="system" className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="light" id="theme-light" />
-                    <Label htmlFor="theme-light">Mode Terang</Label>
+                    <Label htmlFor="theme-light">{t('lightMode')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="dark" id="theme-dark" />
-                    <Label htmlFor="theme-dark">Mode Gelap</Label>
+                    <Label htmlFor="theme-dark">{t('darkMode')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="system" id="theme-system" />
-                    <Label htmlFor="theme-system">Ikuti Sistem</Label>
+                    <Label htmlFor="theme-system">{t('followSystem')}</Label>
                   </div>
                 </RadioGroup>
               </CardContent>
@@ -225,22 +231,22 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3">
                     <Lock className="w-6 h-6" />
                     <div>
-                        <CardTitle>Keamanan Aplikasi</CardTitle>
-                        <CardDescription>Kecil, tapi krusial 🔐</CardDescription>
+                        <CardTitle>{t('appSecurity')}</CardTitle>
+                        <CardDescription>{t('appSecurityDesc')}</CardDescription>
                     </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button variant="outline" className="w-full">Ubah Password</Button>
+                <Button variant="outline" className="w-full">{t('changePassword')}</Button>
                 <div className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <Label>Logout Otomatis</Label>
+                    <Label>{t('autoLogout')}</Label>
                   </div>
                   <Switch />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="timeout-app">Timeout Aplikasi (menit)</Label>
-                    <Input id="timeout-app" type="number" placeholder="Contoh: 15"/>
+                    <Label htmlFor="timeout-app">{t('appTimeout')}</Label>
+                    <Input id="timeout-app" type="number" placeholder={t('appTimeoutPlaceholder')}/>
                 </div>
               </CardContent>
             </Card>
@@ -251,22 +257,22 @@ export default function SettingsPage() {
                     <div className="flex items-center gap-3">
                         <Info className="w-6 h-6"/>
                         <div>
-                            <CardTitle>Tentang Aplikasi</CardTitle>
+                            <CardTitle>{t('aboutApp')}</CardTitle>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex justify-between"><span>Versi Aplikasi:</span> <span>1.0.0</span></div>
-                    <div className="flex justify-between"><span>Pengembang:</span> <span>Rideasy Team</span></div>
+                    <div className="flex justify-between"><span>{t('appVersion')}:</span> <span>1.0.0</span></div>
+                    <div className="flex justify-between"><span>{t('developer')}:</span> <span>Rideasy Team</span></div>
                     <Separator/>
-                    <Button variant="link" className="p-0 h-auto" asChild><Link href="/terms">Syarat & Ketentuan</Link></Button>
+                    <Button variant="link" className="p-0 h-auto" asChild><Link href="/terms">{t('termsAndConditions')}</Link></Button>
                     <br/>
-                    <Button variant="link" className="p-0 h-auto" asChild><Link href="/contact">Kontak Bantuan</Link></Button>
+                    <Button variant="link" className="p-0 h-auto" asChild><Link href="/contact">{t('contactSupport')}</Link></Button>
                 </CardContent>
             </Card>
           </div>
         </div>
-        <Button onClick={handleSaveChanges}>Simpan Perubahan</Button>
+        <Button onClick={handleSaveChanges}>{t('saveChanges')}</Button>
       </div>
     </div>
   );

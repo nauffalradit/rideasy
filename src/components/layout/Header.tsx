@@ -18,11 +18,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/use-translation';
 
 const navLinks = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/vehicles', label: 'Vehicles', icon: CarFront },
-  { href: '/tracking', label: 'Live Map', icon: MapPin },
+  { href: '/', labelKey: 'dashboard', icon: LayoutDashboard },
+  { href: '/vehicles', labelKey: 'vehicles', icon: CarFront },
+  { href: '/tracking', labelKey: 'liveMap', icon: MapPin },
 ];
 
 export default function Header() {
@@ -30,18 +31,19 @@ export default function Header() {
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
       toast({
-        title: 'Signed Out',
-        description: 'You have been successfully signed out.',
+        title: t('signOutSuccessTitle'),
+        description: t('signOutSuccessDesc'),
       });
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Sign Out Error',
+        title: t('signOutErrorTitle'),
         description: error.message,
       });
     }
@@ -80,7 +82,7 @@ export default function Header() {
               )}
             >
               <link.icon className="h-4 w-4" />
-              {link.label}
+              {t(link.labelKey)}
             </Link>
           ))}
         </nav>
@@ -111,19 +113,19 @@ export default function Header() {
                   <DropdownMenuItem asChild>
                     <Link href="/profile">
                       <UserIcon className="mr-2 h-4 w-4" />
-                      <span>Profil Saya</span>
+                      <span>{t('myProfile')}</span>
                     </Link>
                   </DropdownMenuItem>
                    <DropdownMenuItem asChild>
                     <Link href="/settings">
                       <Settings className="mr-2 h-4 w-4" />
-                      <span>Pengaturan</span>
+                      <span>{t('settings')}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    <span>{t('logout')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -131,10 +133,10 @@ export default function Header() {
           ) : (
             <div className='flex items-center gap-2'>
                <Button asChild variant="ghost">
-                <Link href="/login">Login</Link>
+                <Link href="/login">{t('login')}</Link>
               </Button>
               <Button asChild>
-                <Link href="/register">Register</Link>
+                <Link href="/register">{t('register')}</Link>
               </Button>
             </div>
           )}
@@ -159,7 +161,7 @@ export default function Header() {
                       className="text-lg flex items-center gap-2"
                     >
                       <link.icon className="h-5 w-5" />
-                      {link.label}
+                      {t(link.labelKey)}
                     </Link>
                   ))}
                 </div>

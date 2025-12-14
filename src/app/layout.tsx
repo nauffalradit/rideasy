@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import { FirebaseClientProvider } from '@/firebase';
 import { VehicleProvider } from '@/context/VehicleContext';
+import { LanguageProvider } from '@/context/LanguageContext';
 
 export const metadata: Metadata = {
   title: 'Rideasy - Vehicle Rentals Made Easy',
@@ -28,11 +29,13 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased flex flex-col min-h-screen bg-muted/40')}>
         <FirebaseClientProvider>
-          <VehicleProvider>
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Toaster />
-          </VehicleProvider>
+            <LanguageProvider>
+              <VehicleProvider>
+                <Header />
+                <main className="flex-grow">{children}</main>
+                <Toaster />
+              </VehicleProvider>
+            </LanguageProvider>
         </FirebaseClientProvider>
       </body>
     </html>

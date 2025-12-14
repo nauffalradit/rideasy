@@ -16,10 +16,13 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Camera, User as UserIcon } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslation } from '@/hooks/use-translation';
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const getInitials = (email: string | null | undefined) => {
     if (!email) return 'U';
@@ -36,8 +39,8 @@ export default function ProfilePage() {
   
   const handleSaveChanges = () => {
     toast({
-      title: 'Profil Diperbarui',
-      description: 'Perubahan pada profil Anda telah berhasil disimpan.',
+      title: t('profileUpdatedTitle'),
+      description: t('profileUpdatedDesc'),
     });
   };
   
@@ -78,10 +81,10 @@ export default function ProfilePage() {
   if (!user) {
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 text-center">
-            <h2 className="text-2xl font-bold">Akses Ditolak</h2>
-            <p className="text-muted-foreground">Silakan login untuk melihat halaman profil Anda.</p>
+            <h2 className="text-2xl font-bold">{t('accessDenied')}</h2>
+            <p className="text-muted-foreground">{t('pleaseLogin')}</p>
             <Button asChild>
-                <a href="/login">Login</a>
+                <Link href="/login">{t('login')}</Link>
             </Button>
         </div>
     )
@@ -93,9 +96,9 @@ export default function ProfilePage() {
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Profil Saya</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{t('myProfile')}</h2>
           <p className="text-muted-foreground">
-            Kelola informasi pribadi dan data akun Anda.
+            {t('myProfileDesc')}
           </p>
         </div>
         <Separator />
@@ -105,9 +108,9 @@ export default function ProfilePage() {
             <div className="flex items-center gap-3">
               <UserIcon className="w-6 h-6" />
               <div>
-                <CardTitle>Informasi Pribadi</CardTitle>
+                <CardTitle>{t('personalInfo')}</CardTitle>
                 <CardDescription>
-                  Perbarui foto, nama, dan detail kontak Anda.
+                  {t('personalInfoDesc')}
                 </CardDescription>
               </div>
             </div>
@@ -116,7 +119,7 @@ export default function ProfilePage() {
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="relative group">
                 <Avatar className="w-24 h-24 text-4xl">
-                  <AvatarImage src={user.photoURL || ''} alt="Foto Profil" />
+                  <AvatarImage src={user.photoURL || ''} alt={t('profilePhotoAlt')} />
                   <AvatarFallback>{getInitials(user.email)}</AvatarFallback>
                 </Avatar>
                 <button className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -124,31 +127,31 @@ export default function ProfilePage() {
                 </button>
               </div>
               <div className="flex flex-col sm:flex-row gap-2">
-                 <Button variant="outline">Unggah Foto Baru</Button>
-                 <Button variant="ghost" className='text-destructive hover:text-destructive'>Hapus Foto</Button>
+                 <Button variant="outline">{t('uploadNewPhoto')}</Button>
+                 <Button variant="ghost" className='text-destructive hover:text-destructive'>{t('removePhoto')}</Button>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="firstName">Nama Depan</Label>
+                <Label htmlFor="firstName">{t('firstName')}</Label>
                 <Input id="firstName" defaultValue={firstName} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Nama Belakang</Label>
+                <Label htmlFor="lastName">{t('lastName')}</Label>
                 <Input id="lastName" defaultValue={lastName} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="email">Alamat Email</Label>
+                <Label htmlFor="email">{t('emailAddress')}</Label>
                 <Input id="email" type="email" defaultValue={user.email || ''} disabled />
               </div>
                <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="phone">Nomor Telepon</Label>
-                <Input id="phone" type="tel" placeholder="Contoh: +628123456789" defaultValue={user.phoneNumber || ''} />
+                <Label htmlFor="phone">{t('phoneNumber')}</Label>
+                <Input id="phone" type="tel" placeholder={t('phonePlaceholder')} defaultValue={user.phoneNumber || ''} />
               </div>
             </div>
             <div className='flex justify-end'>
-                <Button onClick={handleSaveChanges}>Simpan Perubahan</Button>
+                <Button onClick={handleSaveChanges}>{t('saveChanges')}</Button>
             </div>
           </CardContent>
         </Card>
