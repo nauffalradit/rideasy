@@ -5,12 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { Vehicle } from '@/lib/types';
 import { ArrowRight, Car, Bike } from 'lucide-react';
+import { useCurrency } from '@/context/CurrencyContext';
 
 type VehicleCardProps = {
   vehicle: Vehicle;
 };
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
+  const { formatCurrency } = useCurrency();
+
   return (
     <Card className="flex flex-col overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 duration-300 ease-in-out">
       <CardHeader className="p-0">
@@ -37,7 +40,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
       </CardContent>
       <CardFooter className="p-4 flex justify-between items-center bg-muted/50">
         <div>
-          <span className="text-2xl font-bold">${vehicle.pricePerDay}</span>
+          <span className="text-2xl font-bold">{formatCurrency(vehicle.pricePerDay)}</span>
           <span className="text-muted-foreground">/day</span>
         </div>
         <Button asChild>

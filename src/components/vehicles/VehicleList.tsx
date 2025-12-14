@@ -27,11 +27,13 @@ import { Card } from '@/components/ui/card';
 import { useVehicles } from '@/context/VehicleContext';
 import { Skeleton } from '../ui/skeleton';
 import { useTranslation } from '@/hooks/use-translation';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function VehicleList() {
   const { vehicles, isLoading } = useVehicles();
   const [filter, setFilter] = useState('All');
   const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
 
   const filteredVehicles = vehicles.filter(
     (vehicle) => filter === 'All' || vehicle.type === filter
@@ -107,7 +109,7 @@ export default function VehicleList() {
                   <Badge variant="outline">{t(vehicle.type.toLowerCase() as 'car' | 'motorcycle')}</Badge>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  ${vehicle.pricePerDay}/{t('day')}
+                  {formatCurrency(vehicle.pricePerDay)}/{t('day')}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   {vehicle.seats}
@@ -144,5 +146,3 @@ export default function VehicleList() {
     </Tabs>
   );
 }
-
-    

@@ -142,5 +142,8 @@
   "vehicleStatus": "Status Kendaraan",
   "vehicleStatusDesc": "Kelola ketersediaan dan perawatan kendaraan.",
   "markForMaintenance": "Tandai untuk Perawatan",
-  "editVehicle": "Ubah Kendaraan"
+  "editVehicle": "Ubah Kendaraan",
+  "currency": "Mata Uang",
+  "currencyDesc": "Pilih mata uang pilihan Anda.",
+  "currencyPlaceholder": "Pilih mata uang"
 }

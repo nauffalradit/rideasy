@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import { FirebaseClientProvider } from '@/firebase';
 import { VehicleProvider } from '@/context/VehicleContext';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { CurrencyProvider } from '@/context/CurrencyContext';
 
 export const metadata: Metadata = {
   title: 'Rideasy - Vehicle Rentals Made Easy',
@@ -29,13 +30,15 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased flex flex-col min-h-screen bg-muted/40')}>
         <FirebaseClientProvider>
-            <LanguageProvider>
+          <LanguageProvider>
+            <CurrencyProvider>
               <VehicleProvider>
                 <Header />
                 <main className="flex-grow">{children}</main>
                 <Toaster />
               </VehicleProvider>
-            </LanguageProvider>
+            </CurrencyProvider>
+          </LanguageProvider>
         </FirebaseClientProvider>
       </body>
     </html>

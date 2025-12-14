@@ -15,6 +15,7 @@ import { Car, Fuel, Gauge, Users, GitCommitHorizontal, Sparkles, Zap, Bike, Wren
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/use-translation';
+import { useCurrency } from '@/context/CurrencyContext';
 
 type VehicleDetailsPageProps = {
   vehicle: Vehicle;
@@ -22,6 +23,7 @@ type VehicleDetailsPageProps = {
 
 export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps) {
   const { t } = useTranslation();
+  const { formatCurrency, currency } = useCurrency();
 
   const statusConfig = {
       Available: {
@@ -104,7 +106,7 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
                     </Badge>
                 </div>
                 <div className="mb-6">
-                    <span className="text-4xl font-bold text-primary">${vehicle.pricePerDay}</span>
+                    <span className="text-4xl font-bold text-primary">{formatCurrency(vehicle.pricePerDay)}</span>
                     <span className="text-xl text-muted-foreground">/{t('day')}</span>
                 </div>
                 

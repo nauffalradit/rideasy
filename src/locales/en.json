@@ -142,5 +142,8 @@
   "vehicleStatus": "Vehicle Status",
   "vehicleStatusDesc": "Manage vehicle availability and maintenance.",
   "markForMaintenance": "Mark for Maintenance",
-  "editVehicle": "Edit Vehicle"
+  "editVehicle": "Edit Vehicle",
+  "currency": "Currency",
+  "currencyDesc": "Choose your preferred currency.",
+  "currencyPlaceholder": "Select currency"
 }

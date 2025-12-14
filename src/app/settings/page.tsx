@@ -20,16 +20,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Globe, Palette, Bell, MapPin, Shield, Lock, Info } from 'lucide-react';
+import { Globe, Palette, Bell, MapPin, Shield, Lock, Info, Landmark } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from '@/hooks/use-translation';
 import { useLanguage } from '@/context/LanguageContext';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function SettingsPage() {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
+  const { currency, setCurrency } = useCurrency();
 
   const handleSaveChanges = () => {
     toast({
@@ -191,6 +193,30 @@ export default function SettingsPage() {
                   <SelectContent>
                     <SelectItem value="id">Bahasa Indonesia</SelectItem>
                     <SelectItem value="en">English</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
+            {/* Mata Uang */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Landmark className="w-6 h-6" />
+                  <div>
+                    <CardTitle>{t('currency')}</CardTitle>
+                    <CardDescription>{t('currencyDesc')}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Select value={currency} onValueChange={(value) => setCurrency(value as 'USD' | 'IDR')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('currencyPlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="IDR">IDR (Rp)</SelectItem>
                   </SelectContent>
                 </Select>
               </CardContent>
