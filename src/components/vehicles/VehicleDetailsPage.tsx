@@ -14,36 +14,39 @@ import { Badge } from '@/components/ui/badge';
 import { Car, Fuel, Gauge, Users, GitCommitHorizontal, Sparkles, Zap, Bike, Wrench, CalendarCheck } from 'lucide-react';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/use-translation';
 
 type VehicleDetailsPageProps = {
   vehicle: Vehicle;
 };
 
-const statusConfig = {
-    Available: {
-        color: "bg-green-500",
-        icon: CalendarCheck,
-        text: "Available",
-    },
-    Rented: {
-        color: "bg-yellow-500",
-        icon: Car,
-        text: "Rented",
-    },
-    Maintenance: {
-        color: "bg-orange-500",
-        icon: Wrench,
-        text: "Maintenance",
-    },
-};
-
 export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps) {
+  const { t } = useTranslation();
+
+  const statusConfig = {
+      Available: {
+          color: "bg-green-500",
+          icon: CalendarCheck,
+          text: t('available'),
+      },
+      Rented: {
+          color: "bg-yellow-500",
+          icon: Car,
+          text: t('rented'),
+      },
+      Maintenance: {
+          color: "bg-orange-500",
+          icon: Wrench,
+          text: t('maintenance'),
+      },
+  };
+
   const specs = [
-    { icon: Gauge, label: 'Engine', value: vehicle.specs.engine },
-    { icon: vehicle.specs.fuelType === 'Electric' ? Zap : Fuel, label: 'Fuel Type', value: vehicle.specs.fuelType },
-    { icon: Sparkles, label: 'Horsepower', value: `${vehicle.specs.horsepower} HP` },
-    { icon: Users, label: 'Seats', value: vehicle.seats },
-    { icon: GitCommitHorizontal, label: 'Transmission', value: vehicle.transmission },
+    { icon: Gauge, label: t('engine'), value: vehicle.specs.engine },
+    { icon: vehicle.specs.fuelType === 'Electric' ? Zap : Fuel, label: t('fuelType'), value: t(vehicle.specs.fuelType.toLowerCase()) },
+    { icon: Sparkles, label: t('horsepower'), value: `${vehicle.specs.horsepower} HP` },
+    { icon: Users, label: t('seats'), value: vehicle.seats },
+    { icon: GitCommitHorizontal, label: t('transmission'), value: t(vehicle.transmission.toLowerCase()) },
   ];
   
   const currentStatus = statusConfig[vehicle.status];
@@ -76,7 +79,7 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
             <CarouselNext className="hidden sm:flex" />
           </Carousel>
           <div className="mt-8">
-            <h2 className="text-2xl font-bold font-headline mb-4">Specifications</h2>
+            <h2 className="text-2xl font-bold font-headline mb-4">{t('specifications')}</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {specs.map((spec) => (
                 <Card key={spec.label}>
@@ -97,18 +100,18 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
                     <h1 className="text-4xl font-bold font-headline">{vehicle.name}</h1>
                     <Badge variant="secondary" className="flex items-center gap-2 text-lg py-1 px-3">
                         {vehicle.type === 'Car' ? <Car size={20} /> : <Bike size={20} />}
-                        {vehicle.type}
+                        {t(vehicle.type.toLowerCase() as 'car' | 'motorcycle')}
                     </Badge>
                 </div>
                 <div className="mb-6">
                     <span className="text-4xl font-bold text-primary">${vehicle.pricePerDay}</span>
-                    <span className="text-xl text-muted-foreground">/day</span>
+                    <span className="text-xl text-muted-foreground">/{t('day')}</span>
                 </div>
                 
                 <Card className="w-full shadow-lg">
                     <CardHeader>
-                        <CardTitle>Vehicle Status</CardTitle>
-                        <CardDescription>Manage vehicle availability and maintenance.</CardDescription>
+                        <CardTitle>{t('vehicleStatus')}</CardTitle>
+                        <CardDescription>{t('vehicleStatusDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-4 p-4 rounded-lg bg-muted">
@@ -118,8 +121,8 @@ export default function VehicleDetailsPage({ vehicle }: VehicleDetailsPageProps)
                         </div>
                     </CardContent>
                     <CardFooter className='flex gap-2'>
-                        <Button variant="outline" className="w-full">Mark for Maintenance</Button>
-                        <Button className="w-full">Edit Vehicle</Button>
+                        <Button variant="outline" className="w-full">{t('markForMaintenance')}</Button>
+                        <Button className="w-full">{t('editVehicle')}</Button>
                     </CardFooter>
                 </Card>
             </div>

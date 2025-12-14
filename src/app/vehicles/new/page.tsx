@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useVehicles } from '@/context/VehicleContext';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useTranslation } from '@/hooks/use-translation';
 
 const vehicleSchema = z.object({
   name: z.string().min(1, "Vehicle name is required"),
@@ -35,6 +36,7 @@ export default function NewVehiclePage() {
     const router = useRouter();
     const { toast } = useToast();
     const { addVehicle } = useVehicles();
+    const { t } = useTranslation();
 
     const form = useForm<z.infer<typeof vehicleSchema>>({
         resolver: zodResolver(vehicleSchema),
@@ -83,8 +85,8 @@ export default function NewVehiclePage() {
         addVehicle(newVehicleData);
 
         toast({
-            title: "Vehicle Added",
-            description: `${data.name} has been successfully added to your fleet.`,
+            title: t('vehicleAddedTitle'),
+            description: t('vehicleAddedDesc', { vehicleName: data.name }),
         });
         router.push('/vehicles');
     }
@@ -95,12 +97,12 @@ export default function NewVehiclePage() {
              <Button variant="outline" size="icon" className="h-8 w-8" asChild>
                 <Link href="/vehicles">
                     <ArrowLeft className="h-4 w-4" />
-                    <span className="sr-only">Back</span>
+                    <span className="sr-only">{t('back')}</span>
                 </Link>
              </Button>
             <div>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Add New Vehicle</h2>
-                <p className="text-muted-foreground">Fill in the details below to add a new vehicle to your fleet.</p>
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight">{t('addNewVehicle')}</h2>
+                <p className="text-muted-foreground">{t('addNewVehicleDesc')}</p>
             </div>
         </div>
 
@@ -111,8 +113,8 @@ export default function NewVehiclePage() {
                     <div className="lg:col-span-2 space-y-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Vehicle Information</CardTitle>
-                                <CardDescription>Basic details about the vehicle.</CardDescription>
+                                <CardTitle>{t('vehicleInfo')}</CardTitle>
+                                <CardDescription>{t('vehicleInfoDesc')}</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <FormField
@@ -120,9 +122,9 @@ export default function NewVehiclePage() {
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Vehicle Name</FormLabel>
+                                            <FormLabel>{t('vehicleName')}</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="e.g., Urban Cruiser" {...field} />
+                                                <Input placeholder={t('vehicleNamePlaceholder')} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -134,14 +136,14 @@ export default function NewVehiclePage() {
                                         name="type"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Type</FormLabel>
+                                                <FormLabel>{t('type')}</FormLabel>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
-                                                        <SelectTrigger><SelectValue placeholder="Select vehicle type" /></SelectTrigger>
+                                                        <SelectTrigger><SelectValue placeholder={t('selectVehicleType')} /></SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
-                                                        <SelectItem value="Car"><div className="flex items-center gap-2"><Car/>Car</div></SelectItem>
-                                                        <SelectItem value="Motorcycle"><div className="flex items-center gap-2"><Bike/>Motorcycle</div></SelectItem>
+                                                        <SelectItem value="Car"><div className="flex items-center gap-2"><Car/>{t('car')}</div></SelectItem>
+                                                        <SelectItem value="Motorcycle"><div className="flex items-center gap-2"><Bike/>{t('motorcycle')}</div></SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -153,15 +155,15 @@ export default function NewVehiclePage() {
                                         name="status"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Status</FormLabel>
+                                                <FormLabel>{t('status')}</FormLabel>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
-                                                        <SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger>
+                                                        <SelectTrigger><SelectValue placeholder={t('selectStatus')} /></SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
-                                                        <SelectItem value="Available">Available</SelectItem>
-                                                        <SelectItem value="Rented">Rented</SelectItem>
-                                                        <SelectItem value="Maintenance">Maintenance</SelectItem>
+                                                        <SelectItem value="Available">{t('available')}</SelectItem>
+                                                        <SelectItem value="Rented">{t('rented')}</SelectItem>
+                                                        <SelectItem value="Maintenance">{t('maintenance')}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -174,9 +176,9 @@ export default function NewVehiclePage() {
                                     name="description"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Description</FormLabel>
+                                            <FormLabel>{t('description')}</FormLabel>
                                             <FormControl>
-                                                <Textarea placeholder="A brief description of the vehicle." {...field} />
+                                                <Textarea placeholder={t('descriptionPlaceholder')} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -187,8 +189,8 @@ export default function NewVehiclePage() {
 
                         <Card>
                              <CardHeader>
-                                <CardTitle>Specifications</CardTitle>
-                                <CardDescription>Technical details of the vehicle.</CardDescription>
+                                <CardTitle>{t('specifications')}</CardTitle>
+                                <CardDescription>{t('specificationsDesc')}</CardDescription>
                             </CardHeader>
                             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
@@ -196,9 +198,9 @@ export default function NewVehiclePage() {
                                     name="engine"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel><Gauge className="inline mr-2"/>Engine</FormLabel>
+                                            <FormLabel><Gauge className="inline mr-2"/>{t('engine')}</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="e.g., 1.5L 4-Cylinder" {...field} />
+                                                <Input placeholder={t('enginePlaceholder')} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -209,9 +211,9 @@ export default function NewVehiclePage() {
                                     name="horsepower"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel><Sparkles className="inline mr-2"/>Horsepower (HP)</FormLabel>
+                                            <FormLabel><Sparkles className="inline mr-2"/>{t('horsepower')}</FormLabel>
                                             <FormControl>
-                                                <Input type="number" placeholder="e.g., 120" {...field} />
+                                                <Input type="number" placeholder={t('horsepowerPlaceholder')} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -222,15 +224,15 @@ export default function NewVehiclePage() {
                                     name="fuelType"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel><Fuel className="inline mr-2"/>Fuel Type</FormLabel>
+                                            <FormLabel><Fuel className="inline mr-2"/>{t('fuelType')}</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl>
-                                                    <SelectTrigger><SelectValue placeholder="Select fuel type" /></SelectTrigger>
+                                                    <SelectTrigger><SelectValue placeholder={t('selectFuelType')} /></SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value="Gasoline">Gasoline</SelectItem>
-                                                    <SelectItem value="Electric">Electric</SelectItem>
-                                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                                    <SelectItem value="Gasoline">{t('gasoline')}</SelectItem>
+                                                    <SelectItem value="Electric">{t('electric')}</SelectItem>
+                                                    <SelectItem value="Hybrid">{t('hybrid')}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -242,14 +244,14 @@ export default function NewVehiclePage() {
                                     name="transmission"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel><GitCommitHorizontal className="inline mr-2"/>Transmission</FormLabel>
+                                            <FormLabel><GitCommitHorizontal className="inline mr-2"/>{t('transmission')}</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl>
-                                                    <SelectTrigger><SelectValue placeholder="Select transmission" /></SelectTrigger>
+                                                    <SelectTrigger><SelectValue placeholder={t('selectTransmission')} /></SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value="Automatic">Automatic</SelectItem>
-                                                    <SelectItem value="Manual">Manual</SelectItem>
+                                                    <SelectItem value="Automatic">{t('automatic')}</SelectItem>
+                                                    <SelectItem value="Manual">{t('manual')}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -261,9 +263,9 @@ export default function NewVehiclePage() {
                                     name="seats"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel><Users className="inline mr-2"/>Seats</FormLabel>
+                                            <FormLabel><Users className="inline mr-2"/>{t('seats')}</FormLabel>
                                             <FormControl>
-                                                <Input type="number" placeholder="e.g., 4" {...field} />
+                                                <Input type="number" placeholder={t('seatsPlaceholder')} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -277,8 +279,8 @@ export default function NewVehiclePage() {
                     <div className="space-y-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Pricing</CardTitle>
-                                <CardDescription>Set the daily rental rate.</CardDescription>
+                                <CardTitle>{t('pricing')}</CardTitle>
+                                <CardDescription>{t('pricingDesc')}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                  <FormField
@@ -286,7 +288,7 @@ export default function NewVehiclePage() {
                                     name="pricePerDay"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Price per Day ($)</FormLabel>
+                                            <FormLabel>{t('pricePerDay')}</FormLabel>
                                             <FormControl>
                                                 <Input type="number" placeholder="e.g., 55" {...field} />
                                             </FormControl>
@@ -298,8 +300,8 @@ export default function NewVehiclePage() {
                         </Card>
                          <Card>
                             <CardHeader>
-                                <CardTitle>Media</CardTitle>
-                                <CardDescription>Upload vehicle images.</CardDescription>
+                                <CardTitle>{t('media')}</CardTitle>
+                                <CardDescription>{t('mediaDesc')}</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <FormField
@@ -307,7 +309,7 @@ export default function NewVehiclePage() {
                                     name="imageUrl"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Main Image URL</FormLabel>
+                                            <FormLabel>{t('mainImageUrl')}</FormLabel>
                                                 <FormControl>
                                                     <div className="flex items-center gap-2">
                                                         <Input placeholder="https://example.com/image.png" {...field} />
@@ -321,14 +323,14 @@ export default function NewVehiclePage() {
                         </Card>
 
                         <div className="hidden lg:flex justify-end gap-2">
-                            <Button variant="outline" type="button" onClick={() => router.push('/vehicles')}>Cancel</Button>
-                            <Button type="submit">Save Vehicle</Button>
+                            <Button variant="outline" type="button" onClick={() => router.push('/vehicles')}>{t('cancel')}</Button>
+                            <Button type="submit">{t('saveVehicle')}</Button>
                         </div>
                     </div>
                 </div>
                  <div className="mt-8 flex justify-end gap-2 lg:hidden">
-                    <Button variant="outline" type="button" onClick={() => router.push('/vehicles')} className="w-full sm:w-auto">Cancel</Button>
-                    <Button type="submit" className="w-full sm:w-auto">Save Vehicle</Button>
+                    <Button variant="outline" type="button" onClick={() => router.push('/vehicles')} className="w-full sm:w-auto">{t('cancel')}</Button>
+                    <Button type="submit" className="w-full sm:w-auto">{t('saveVehicle')}</Button>
                 </div>
             </form>
         </Form>

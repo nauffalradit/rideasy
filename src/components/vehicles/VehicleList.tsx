@@ -26,10 +26,12 @@ import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { useVehicles } from '@/context/VehicleContext';
 import { Skeleton } from '../ui/skeleton';
+import { useTranslation } from '@/hooks/use-translation';
 
 export default function VehicleList() {
   const { vehicles, isLoading } = useVehicles();
   const [filter, setFilter] = useState('All');
+  const { t } = useTranslation();
 
   const filteredVehicles = vehicles.filter(
     (vehicle) => filter === 'All' || vehicle.type === filter
@@ -59,9 +61,9 @@ export default function VehicleList() {
   return (
     <Tabs defaultValue="All" onValueChange={setFilter} className="w-full">
       <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-8 md:mb-4">
-        <TabsTrigger value="All">All</TabsTrigger>
-        <TabsTrigger value="Car">Cars</TabsTrigger>
-        <TabsTrigger value="Motorcycle">Motorcycles</TabsTrigger>
+        <TabsTrigger value="All">{t('all')}</TabsTrigger>
+        <TabsTrigger value="Car">{t('cars')}</TabsTrigger>
+        <TabsTrigger value="Motorcycle">{t('motorcycles')}</TabsTrigger>
       </TabsList>
 
       <Card className="p-4">
@@ -69,14 +71,14 @@ export default function VehicleList() {
           <TableHeader>
             <TableRow>
               <TableHead className="hidden w-[100px] sm:table-cell">
-                <span className="sr-only">Image</span>
+                <span className="sr-only">{t('image')}</span>
               </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="hidden md:table-cell">Price</TableHead>
-              <TableHead className="hidden md:table-cell">Seats</TableHead>
+              <TableHead>{t('name')}</TableHead>
+              <TableHead>{t('type')}</TableHead>
+              <TableHead className="hidden md:table-cell">{t('price')}</TableHead>
+              <TableHead className="hidden md:table-cell">{t('seats')}</TableHead>
               <TableHead>
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{t('actions')}</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -102,10 +104,10 @@ export default function VehicleList() {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{vehicle.type}</Badge>
+                  <Badge variant="outline">{t(vehicle.type.toLowerCase() as 'car' | 'motorcycle')}</Badge>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  ${vehicle.pricePerDay}/day
+                  ${vehicle.pricePerDay}/{t('day')}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   {vehicle.seats}
@@ -119,18 +121,18 @@ export default function VehicleList() {
                         variant="ghost"
                       >
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">{t('toggleMenu')}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
                         <Link href={`/vehicles/${vehicle.id}`}>
-                          View Details
+                          {t('viewDetails')}
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Delete</DropdownMenuItem>
+                      <DropdownMenuItem>{t('edit')}</DropdownMenuItem>
+                      <DropdownMenuItem>{t('delete')}</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
